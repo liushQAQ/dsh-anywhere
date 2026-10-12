@@ -1,0 +1,9 @@
+# 临时文件与依赖
+node_modules/
+.DS_Store
+*.log
+*.bak*
+
+# cloudflared 二进制在发布时通过 release 资源附带或首次启动时自动下载，不进 git 历史以控制仓库体积
+bin/cloudflared.exe
+bin/*.download

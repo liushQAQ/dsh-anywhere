@@ -1,0 +1,4 @@
+# dsh-anywhere bundle patch
+- insert:
+    - id: dsh-anywhere
+      name: dsh-anywhere
