@@ -635,34 +635,38 @@ var MOBILE_CSS = `
   cursor: default;
 }
 
-/* Floating fallback button (hero / blank phases without a session header).
-   The top clears the camera band below the status bar; when the client has
-   set viewport-fit=cover the safe-area inset moves it below the notch too. */
+/* Floating fallback button: \u89C4\u8303\u4E3A\u4E0E\u4F1A\u8BDD\u9875\u76EE\u5F55\u6309\u94AE\u5B8C\u5168\u4E00\u81F4\u7684\u6241\u5E73\u900F\u660E\u8D28\u611F\uFF0C\u5E76\u6839\u636E\u771F\u5B9E\u72B6\u6001\u680F\u9AD8\u5EA6\u7CBE\u51C6\u907F\u8BA9\uFF08\u907F\u514D\u9A91\u5728\u7075\u52A8\u5C9B\u4E0A\uFF09 */
 [data-mobile-nav="fab"] {
-  position: absolute;
-  top: calc(env(safe-area-inset-top, 0px) + 72px);
-  left: 10px;
-  z-index: 21;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  padding: 0;
-  border: 1px solid var(--dsw-alias-border-l1, rgba(0, 0, 0, .12));
-  border-radius: 50%;
-  background: var(--dsw-alias-button-floating-fill, #ffffff);
-  color: var(--dsw-alias-label-primary, inherit);
-  cursor: pointer;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, .18);
-  -webkit-tap-highlight-color: transparent;
+  position: absolute !important;
+  top: calc(var(--dsh-statusbar, 54px) + 8px) !important;
+  left: 12px !important;
+  z-index: 21 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 38px !important;
+  height: 38px !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+  color: var(--dsw-alias-label-secondary, inherit) !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+  -webkit-tap-highlight-color: transparent !important;
 }
 [data-mobile-nav="fab"]:hover {
-  background: var(--dsw-alias-button-floating-hover, rgba(0, 0, 0, .08));
+  background: var(--dsw-alias-interactive-bg-hover, rgba(0, 0, 0, .06)) !important;
 }
-[data-mobile-nav="fab"]:focus-visible {
-  outline: 2px solid var(--dsw-alias-state-business-primary, #4f6ef7);
-  outline-offset: 2px;
+[data-phase="active"] [data-mobile-nav="fab"] {
+  display: none !important;
+}
+
+/* \u4FA7\u680F\u6536\u8D77\u65F6\u5F7B\u5E95\u9690\u85CF\u62BD\u5C49\u5185\u90E8\u6B8B\u7559\u7684\u5207\u6362\u6309\u94AE\uFF0C\u675C\u7EDD\u5C4F\u5E55\u5DE6\u8FB9\u7F18\u5929\u4E0A\u9732\u51FA\u534A\u4E2A\u591A\u4F59\u5C0F\u6309\u94AE */
+[data-sidebar-collapsed] [class*="WYye1W_toggle"],
+[data-sidebar-collapsed] button[aria-label="\u6253\u5F00\u4FA7\u8FB9\u680F"] {
+  display: none !important;
+  visibility: hidden !important;
 }
 
 /* Dimmed backdrop under the open drawer; above every column, below the drawer.

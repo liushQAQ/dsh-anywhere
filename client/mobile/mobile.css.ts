@@ -82,34 +82,38 @@ export const MOBILE_CSS = `
   cursor: default;
 }
 
-/* Floating fallback button (hero / blank phases without a session header).
-   The top clears the camera band below the status bar; when the client has
-   set viewport-fit=cover the safe-area inset moves it below the notch too. */
+/* Floating fallback button: 规范为与会话页目录按钮完全一致的扁平透明质感，并根据真实状态栏高度精准避让（避免骑在灵动岛上） */
 [data-mobile-nav="fab"] {
-  position: absolute;
-  top: calc(env(safe-area-inset-top, 0px) + 72px);
-  left: 10px;
-  z-index: 21;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  padding: 0;
-  border: 1px solid var(--dsw-alias-border-l1, rgba(0, 0, 0, .12));
-  border-radius: 50%;
-  background: var(--dsw-alias-button-floating-fill, #ffffff);
-  color: var(--dsw-alias-label-primary, inherit);
-  cursor: pointer;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, .18);
-  -webkit-tap-highlight-color: transparent;
+  position: absolute !important;
+  top: calc(var(--dsh-statusbar, 54px) + 8px) !important;
+  left: 12px !important;
+  z-index: 21 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 38px !important;
+  height: 38px !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+  color: var(--dsw-alias-label-secondary, inherit) !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+  -webkit-tap-highlight-color: transparent !important;
 }
 [data-mobile-nav="fab"]:hover {
-  background: var(--dsw-alias-button-floating-hover, rgba(0, 0, 0, .08));
+  background: var(--dsw-alias-interactive-bg-hover, rgba(0, 0, 0, .06)) !important;
 }
-[data-mobile-nav="fab"]:focus-visible {
-  outline: 2px solid var(--dsw-alias-state-business-primary, #4f6ef7);
-  outline-offset: 2px;
+[data-phase="active"] [data-mobile-nav="fab"] {
+  display: none !important;
+}
+
+/* 侧栏收起时彻底隐藏抽屉内部残留的切换按钮，杜绝屏幕左边缘天上露出半个多余小按钮 */
+[data-sidebar-collapsed] [class*="WYye1W_toggle"],
+[data-sidebar-collapsed] button[aria-label="打开侧边栏"] {
+  display: none !important;
+  visibility: hidden !important;
 }
 
 /* Dimmed backdrop under the open drawer; above every column, below the drawer.
