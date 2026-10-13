@@ -350,18 +350,20 @@ export const MOBILE_CSS = `
     z-index: 10040 !important;
     background: var(--dsw-alias-bg-base, #18181b) !important;
     box-sizing: border-box !important;
-    transition: transform 0.24s var(--ds-ease-in-out, ease-in-out) !important;
-  }
-  /* 未打开状态下推出屏幕右侧 */
-  .CZPbNW_rightbarCol:not(:has([data-sidebar-right-open="true"])),
-  [class*="rightbarCol"]:not(:has([data-sidebar-right-open="true"])) {
-    transform: translateX(110%) !important;
+    transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease !important;
+    transform: translateX(105%) !important;
+    opacity: 0 !important;
     pointer-events: none !important;
   }
-  /* 打开状态下平滑拉回全屏呈现 */
+  /* 打开状态下平滑拉回全屏呈现 (兼容属性选择器、class 与 body 状态标记) */
+  .CZPbNW_rightbarCol[data-sidebar-expanded="true"],
+  [class*="rightbarCol"][data-sidebar-expanded="true"],
   .CZPbNW_rightbarCol:has([data-sidebar-right-open="true"]),
-  [class*="rightbarCol"]:has([data-sidebar-right-open="true"]) {
+  [class*="rightbarCol"]:has([data-sidebar-right-open="true"]),
+  body[data-sidebar-right-visible="true"] .CZPbNW_rightbarCol,
+  body[data-sidebar-right-visible="true"] [class*="rightbarCol"] {
     transform: none !important;
+    opacity: 1 !important;
     pointer-events: auto !important;
   }
   .dMHGga_panel {

@@ -903,18 +903,20 @@ var MOBILE_CSS = `
     z-index: 10040 !important;
     background: var(--dsw-alias-bg-base, #18181b) !important;
     box-sizing: border-box !important;
-    transition: transform 0.24s var(--ds-ease-in-out, ease-in-out) !important;
-  }
-  /* \u672A\u6253\u5F00\u72B6\u6001\u4E0B\u63A8\u51FA\u5C4F\u5E55\u53F3\u4FA7 */
-  .CZPbNW_rightbarCol:not(:has([data-sidebar-right-open="true"])),
-  [class*="rightbarCol"]:not(:has([data-sidebar-right-open="true"])) {
-    transform: translateX(110%) !important;
+    transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease !important;
+    transform: translateX(105%) !important;
+    opacity: 0 !important;
     pointer-events: none !important;
   }
-  /* \u6253\u5F00\u72B6\u6001\u4E0B\u5E73\u6ED1\u62C9\u56DE\u5168\u5C4F\u5448\u73B0 */
+  /* \u6253\u5F00\u72B6\u6001\u4E0B\u5E73\u6ED1\u62C9\u56DE\u5168\u5C4F\u5448\u73B0 (\u517C\u5BB9\u5C5E\u6027\u9009\u62E9\u5668\u3001class \u4E0E body \u72B6\u6001\u6807\u8BB0) */
+  .CZPbNW_rightbarCol[data-sidebar-expanded="true"],
+  [class*="rightbarCol"][data-sidebar-expanded="true"],
   .CZPbNW_rightbarCol:has([data-sidebar-right-open="true"]),
-  [class*="rightbarCol"]:has([data-sidebar-right-open="true"]) {
+  [class*="rightbarCol"]:has([data-sidebar-right-open="true"]),
+  body[data-sidebar-right-visible="true"] .CZPbNW_rightbarCol,
+  body[data-sidebar-right-visible="true"] [class*="rightbarCol"] {
     transform: none !important;
+    opacity: 1 !important;
     pointer-events: auto !important;
   }
   .dMHGga_panel {
@@ -2116,6 +2118,43 @@ function mobileApply(ctx) {
       observer.disconnect();
     };
   }, "dsh-mobile-nav: sheet rise animation replay");
+  ctx.effect(() => {
+    if (!narrow.matches) return () => {
+    };
+    const sync = () => {
+      const col = document.querySelector(".CZPbNW_rightbarCol") || document.querySelector('[class*="rightbarCol"]');
+      const panel = document.querySelector(".dMHGga_panel") || document.querySelector("[data-sidebar-right-panel]");
+      if (!col) return;
+      const isOpen = panel !== null && panel.getAttribute("data-sidebar-right-open") === "true" && panel.getAttribute("aria-hidden") !== "true";
+      if (isOpen) {
+        col.setAttribute("data-sidebar-expanded", "true");
+        document.body.setAttribute("data-sidebar-right-visible", "true");
+      } else {
+        col.setAttribute("data-sidebar-expanded", "false");
+        document.body.removeAttribute("data-sidebar-right-visible");
+      }
+    };
+    sync();
+    const observer = new MutationObserver(sync);
+    observer.observe(document.body, { attributes: true, subtree: true, attributeFilter: ["data-sidebar-right-open", "aria-hidden", "class"] });
+    const onDocClick = (e) => {
+      const target = e.target;
+      if (!target) return;
+      if (target.closest('header button[aria-label*="\u53F3\u4FA7\u8FB9\u680F"]') || target.closest("[data-sidebar-right-toggle]")) {
+        setTimeout(sync, 20);
+        setTimeout(sync, 150);
+      }
+      if (target.closest('button[aria-label*="\u6536\u8D77\u53F3\u4FA7\u8FB9\u680F"]') || target.closest('button[aria-label*="\u5173\u95ED"]')) {
+        setTimeout(sync, 20);
+        setTimeout(sync, 150);
+      }
+    };
+    document.addEventListener("click", onDocClick, true);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("click", onDocClick, true);
+    };
+  }, "dsh-mobile-nav: rightbar drawer sync");
   ctx.effect(() => {
     if (!narrow.matches) return () => {
     };
