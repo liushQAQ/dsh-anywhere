@@ -28,7 +28,7 @@ var __copyProps = (to, from, except, desc) => {
 };
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-// client/index.jsx
+// ../packages/dsh-anywhere/client/index.jsx
 var index_exports = {};
 __export(index_exports, {
   apply: () => apply,
@@ -39,7 +39,7 @@ __export(index_exports, {
 module.exports = __toCommonJS(index_exports);
 var import_react2 = require("react");
 
-// client/api.js
+// ../packages/dsh-anywhere/client/api.js
 var ANYWHERE_RPC_CHANNEL = "/dsh-anywhere";
 var ANYWHERE_ENDPOINTS = Object.freeze({
   status: "anywhere.status",
@@ -105,7 +105,7 @@ function redactStatus(s) {
   };
 }
 
-// client/mobile/MobileNavToggle.tsx
+// ../packages/dsh-anywhere/client/mobile/MobileNavToggle.tsx
 var import_dsh_client_ui_primitives = require("@deepseek-ai/dsh-client-ui-primitives");
 function MobileNavToggle({ toggleSidebar, t }) {
   const toggleExplorer = () => {
@@ -140,11 +140,11 @@ function MobileNavToggle({ toggleSidebar, t }) {
   ));
 }
 
-// client/mobile/MobileNavOverlay.tsx
+// ../packages/dsh-anywhere/client/mobile/MobileNavOverlay.tsx
 var import_react = require("react");
 var import_dsh_client_ui_primitives2 = require("@deepseek-ai/dsh-client-ui-primitives");
 
-// client/mobile/nav-targets.mjs
+// ../packages/dsh-anywhere/client/mobile/nav-targets.mjs
 var DRAWER_SELECTOR = '[data-mobile-nav="frame"] > :first-child';
 var TOGGLE_SELECTOR = '[data-mobile-nav="toggle"]';
 var NAV_TARGETS = [
@@ -177,7 +177,7 @@ function isOverlayTap(target) {
   return target.closest(OVERLAY_SELECTOR) !== null;
 }
 
-// client/mobile/MobileNavOverlay.tsx
+// ../packages/dsh-anywhere/client/mobile/MobileNavOverlay.tsx
 var MOBILE_QUERY = "(max-width: 1023px)";
 function useMobile() {
   const [mobile, setMobile] = (0, import_react.useState)(() => window.matchMedia(MOBILE_QUERY).matches);
@@ -300,16 +300,15 @@ function MobileNavOverlay({ toggleSidebar, t }) {
     };
     const onDrawerClick = (event) => {
       if (performance.now() < suppressTouchClickUntil) return;
-      if (pendingTouchRow !== null && performance.now() - lastTouchNavAt < 500 && isPendingTouchClick(event)) {
-        const target = navigationTarget(event.target);
-        const row = target?.closest('[role="treeitem"]');
-        if (row !== null && row !== void 0) {
-          pendingTouchRow = row;
-          navClickArrived = true;
-          return;
-        }
+      const target = navigationTarget(event.target);
+      if (target !== null) {
+        setTimeout(() => {
+          const frame = document.querySelector('[data-mobile-nav="frame"]');
+          if (frame !== null && !frame.hasAttribute("data-sidebar-collapsed")) {
+            toggleSidebar();
+          }
+        }, 100);
       }
-      if (navigationTarget(event.target) !== null) toggleSidebar();
     };
     const onDrawerPointerUp = (event) => {
       if (event.pointerType !== "touch" && event.pointerType !== "pen") return;
@@ -326,7 +325,6 @@ function MobileNavOverlay({ toggleSidebar, t }) {
           lastTouchY = event.clientY;
           armNav(row);
         }
-        return;
       }
     };
     document.addEventListener("click", onDrawerClick, true);
@@ -368,7 +366,7 @@ function MobileNavOverlay({ toggleSidebar, t }) {
   ));
 }
 
-// client/mobile/MobileDrawerFooter.tsx
+// ../packages/dsh-anywhere/client/mobile/MobileDrawerFooter.tsx
 var import_dsh_client_ui_primitives3 = require("@deepseek-ai/dsh-client-ui-primitives");
 function MobileDrawerFooter({ useSessions, downloadSessionLog, toggleSidebar, t }) {
   const sessionId = useSessions((state) => state.current);
@@ -404,7 +402,7 @@ function MobileDrawerFooter({ useSessions, downloadSessionLog, toggleSidebar, t 
   ));
 }
 
-// client/mobile/fileGuard.ts
+// ../packages/dsh-anywhere/client/mobile/fileGuard.ts
 var GUARD_MSG = "\u624B\u673A\u4E0A\u65E0\u6CD5\u76F4\u63A5\u6253\u5F00\u7535\u8111\u4E0A\u7684\u6587\u4EF6";
 var WS_LABELS = ["\u6DFB\u52A0\u5DE5\u4F5C\u533A", "\u6DFB\u52A0\u5DE5\u4F5C\u533A\u2026", "Add workspace", "Add workspace\u2026"];
 var COPY_LABEL = "\u590D\u5236";
@@ -567,7 +565,7 @@ function startFileGuard(readFile) {
   };
 }
 
-// client/mobile/mobile.css.ts
+// ../packages/dsh-anywhere/client/mobile/mobile.css.ts
 var MOBILE_CSS = `
 /* ---------- base control styles (rendered at any width, hidden where unused) ---------- */
 
@@ -735,18 +733,8 @@ var MOBILE_CSS = `
      containing block is the frame's padding box, i.e. still the frame top). */
   [data-mobile-nav="frame"] {
     position: relative !important;
-    /* ANYWHERE-MOBILE-FIX v1: border-box + 100dvh + 1fr rows so the top and
-       bottom insets are subtracted from the viewport.  With the previous
-       content-box + grid-template-rows:<innerH>px the padding was added
-       OUTSIDE the viewport height and pushed the whole center column
-       below the fold. */
-    box-sizing: border-box !important;
-    height: 100dvh !important;
-    min-height: 0 !important;
     grid-template-columns: minmax(0, 1fr) 0 0 !important;
-    grid-template-rows: minmax(0, 1fr) !important;
     padding-top: env(safe-area-inset-top, 0px) !important;
-    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
   }
 
   /* \u4E3B\u5185\u5BB9\u5217\uFF08\u7B2C 2 \u4E2A\u7F51\u683C\u5B50\u5143\u7D20\uFF09\u5728\u5B98\u65B9\u6837\u5F0F\u91CC\u6709\u663E\u5F0F grid-column: 2\u2014\u2014
@@ -757,7 +745,6 @@ var MOBILE_CSS = `
     grid-column: 1 !important;
     grid-row: 1 !important;
     min-width: 0 !important;
-    min-height: 0 !important;
   }
 
   /* The sidebar column (first grid child) becomes a left drawer. The drawer
@@ -970,28 +957,6 @@ var MOBILE_CSS = `
     z-index: 130 !important;
     border-radius: 14px !important;
     box-shadow: 0 -4px 28px rgba(0, 0, 0, .18) !important;
-  }
-
-  /* ANYWHERE-MOBILE-FIX v1 - FIX-B: the model / reasoning-effort menu
-     (dsh-better-reasoning-effort) is portaled onto <body>, i.e. OUTSIDE
-     any [data-phase] container, so the rule above never matches it.  It
-     therefore keeps the inline top the host computed from
-     window.innerHeight and lands under the notch once the keyboard
-     shrinks the visual viewport.  Anchor it to the bottom safe area
-     instead: same treatment as the composer sheets. */
-  body[data-dsh-anywhere-layout="mobile"] .bre-model-menu-host {
-    position: fixed !important;
-    left: 12px !important;
-    right: 12px !important;
-    top: auto !important;
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 12px) !important;
-    width: auto !important;
-    min-width: 0 !important;
-    max-width: none !important;
-    max-height: min(65dvh, 480px) !important;
-    z-index: 1300 !important;
-    border-radius: 14px !important;
-    overflow: auto !important;
   }
 
   /* --- Session header on mobile ---
@@ -1592,7 +1557,7 @@ var MOBILE_CSS = `
 
 `;
 
-// client/mobile/locales.ts
+// ../packages/dsh-anywhere/client/mobile/locales.ts
 var NS = "mobileNav";
 var zh = {
   "open": "\u6253\u5F00\u76EE\u5F55",
@@ -1609,7 +1574,7 @@ var en = {
   "files": "Files"
 };
 
-// client/mobile/layout-mode.mjs
+// ../packages/dsh-anywhere/client/mobile/layout-mode.mjs
 function resolveLayout({ urlValue, stored, narrowMatch }) {
   const url = String(urlValue ?? "").trim();
   if (url === "desktop") return "desktop";
@@ -1633,7 +1598,7 @@ function persistLayoutFromUrl(urlValue) {
   }
 }
 
-// client/mobile/mobile-apply.tsx
+// ../packages/dsh-anywhere/client/mobile/mobile-apply.tsx
 function mobileApply(ctx) {
   const urlValue = new URL(window.location.href).searchParams.get("dsh-layout") ?? "";
   const narrowMQ = window.matchMedia("(max-width: 1023px)");
@@ -1832,8 +1797,8 @@ function mobileApply(ctx) {
   ctx.effect(() => {
     if (!narrow.matches) return () => {
     };
-    const PHRASES = ["加载提供方目录失败", "Settings are unavailable in this browser"];
-    const NOTICE = "手机上不支持模型设置，请去电脑端修改设置";
+    const PHRASES = ["\u52A0\u8F7D\u63D0\u4F9B\u65B9\u76EE\u5F55\u5931\u8D25", "Settings are unavailable in this browser"];
+    const NOTICE = "\u624B\u673A\u4E0A\u4E0D\u652F\u6301\u6A21\u578B\u8BBE\u7F6E\uFF0C\u8BF7\u53BB\u7535\u8111\u7AEF\u4FEE\u6539\u8BBE\u7F6E";
     const findDeepest = (el) => {
       let deepest = el;
       for (const child of el.querySelectorAll("*")) {
@@ -1854,9 +1819,7 @@ function mobileApply(ctx) {
     const observer = new MutationObserver(patch);
     observer.observe(document.body, { childList: true, subtree: true, characterData: true });
     patch();
-    return () => {
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, "dsh-mobile-nav: replace model-settings load error with mobile hint");
   ctx.slots.inject("conversation.session.header.actions", () => ctx.slots.register({
     name: "conversation.session.header.actions",
@@ -1888,15 +1851,15 @@ function mobileApply(ctx) {
   }, MobileDrawerFooter));
 }
 
-// client/anywhere-locales.js
+// ../packages/dsh-anywhere/client/anywhere-locales.js
 var NS2 = "anywhere";
 var zh2 = {
   "section": "\u624B\u673A\u8BBF\u95EE",
   "title": "\u{1F4F1} \u624B\u673A\u8BBF\u95EE",
   "subtitle": "\u624B\u673A\u626B\u7801\u6253\u5F00\u7684\u5C31\u662F\u7535\u8111\u4E0A\u7684\u8FD9\u4E2A\u754C\u9762\uFF0C\u5B9E\u65F6\u540C\u6B65",
-  "developer": "\u5F00\u53D1\u8005\uFF1A\u7A0B\u5E8F\u5458\u5C11\u5317\u6668",
-  "starAsk": "\u2B50 \u987A\u624B\u7559\u9897 Star\uFF0C\u4F5C\u8005\u80FD\u9AD8\u5174\u4E00\u6574\u5929",
-  "starCta": "\u884C\uFF0C\u7ED9\u4F60\u4E00\u9897 Star",
+  "developer": "\u5F00\u53D1\u8005\uFF1Aliush734530963 (liushQAQ)",
+  "starAsk": "\u2B50 \u4E13\u4E3A iOS App \u4E0E\u591A\u7EC8\u7AEF\u534F\u540C\u6253\u9020",
+  "starCta": "\u2B50 GitHub \u6E90\u7801\u4ED3\u5E93",
   "restarted": "\u{1F504} \u5DF2\u91CD\u542F",
   "ok": "\u77E5\u9053\u4E86",
   "bgHint": "\u8FDB\u7A0B\u5728\u540E\u53F0\u8FD0\u884C\uFF08\u4E0D\u6302\u7EC8\u7AEF\uFF09\u3002\u5982\u9700\u505C\u6B62\uFF1A{cmd}",
@@ -1964,6 +1927,14 @@ var zh2 = {
   "tunnelMode": "\u516C\u7F51\u6A21\u5F0F\uFF1A",
   "modeQuick": "\u968F\u673A\u57DF\u540D\uFF08\u9ED8\u8BA4\uFF09",
   "modeNamed": "\u56FA\u5B9A\u57DF\u540D",
+  "modeFixed": "\u81EA\u5B9A\u4E49\u516C\u7F51/FRP",
+  "fixedSummary": "\u81EA\u5B9A\u4E49\u5730\u5740\uFF1A{url}",
+  "fixedEdit": "\u4FEE\u6539",
+  "fixedUrlLabel": "\u81EA\u5B9A\u4E49\u516C\u7F51\u8BBF\u95EE URL\uFF1A",
+  "fixedHow": "\u9002\u7528\u4E8E\u81EA\u884C\u642D\u5EFA\u7684 FRP\u3001DDNS\u3001Ngrok\u3001\u5185\u7F51\u7A7F\u900F\u6216\u4E91\u670D\u52A1\u5668\u8F6C\u53D1\uFF0C\u76F4\u63A5\u586B\u5165\u53EF\u4ECE\u5916\u90E8\u8BBF\u95EE\u7684\u5B8C\u6574 URL\u3002",
+  "fixedNeedCfg": "\u8BF7\u5148\u8F93\u5165\u5B8C\u6574\u7684\u516C\u7F51\u8BBF\u95EE URL",
+  "fixedRunningHint": "\u81EA\u5B9A\u4E49\u516C\u7F51/FRP\u901A\u9053\u5DF2\u8FDE\u63A5",
+  "fixedTakeEffect": "\u5DF2\u4FDD\u5B58\u81EA\u5B9A\u4E49\u516C\u7F51\u5730\u5740\u2014\u2014\u9700\u5173\u95ED\u5E76\u91CD\u65B0\u5F00\u542F\u516C\u7F51\u8BBF\u95EE\u540E\u751F\u6548",
   "namedSummary": "\u56FA\u5B9A\u57DF\u540D\uFF1A{host} \xB7 Token {token}",
   "namedTokenSet": "\u5DF2\u914D\u7F6E",
   "namedTokenMissing": "\u672A\u914D\u7F6E",
@@ -1990,9 +1961,9 @@ var en2 = {
   "section": "Phone access",
   "title": "\u{1F4F1} Phone access",
   "subtitle": "The phone shows this exact screen, live",
-  "developer": "Developer: \u5C11\u5317\u6668 (shaobeichen)",
-  "starAsk": "\u2B50 Drop a Star if it helped \u2014 it makes the author\u2019s day",
-  "starCta": "\u2605 Give a Star",
+  "developer": "Developer: liush734530963 (liushQAQ)",
+  "starAsk": "\u2B50 Built for iOS App & Multi-device Sync",
+  "starCta": "\u2B50 GitHub Repository",
   "restarted": "\u{1F504} Restarted",
   "ok": "Got it",
   "bgHint": "Running in the background (not attached to a terminal). To stop: {cmd}",
@@ -2060,6 +2031,14 @@ var en2 = {
   "tunnelMode": "Mode:",
   "modeQuick": "Random URL (default)",
   "modeNamed": "Fixed domain",
+  "modeFixed": "Custom / FRP",
+  "fixedSummary": "Custom URL: {url}",
+  "fixedEdit": "Edit",
+  "fixedUrlLabel": "Custom Public URL:",
+  "fixedHow": "For custom FRP, DDNS, Ngrok, or reverse proxy. Enter the full public URL reachable from outside.",
+  "fixedNeedCfg": "Please enter a valid public URL first",
+  "fixedRunningHint": "Custom public tunnel (FRP/port-forward) connected",
+  "fixedTakeEffect": "Custom URL saved \u2014 turn public access off and on again to take effect",
   "namedSummary": "Fixed domain: {host} \xB7 Token {token}",
   "namedTokenSet": "configured",
   "namedTokenMissing": "not set",
@@ -2083,7 +2062,7 @@ var en2 = {
   "feedback": "\u{1F64F} Questions? Open an issue on GitHub"
 };
 
-// client/index.jsx
+// ../packages/dsh-anywhere/client/index.jsx
 var name = "dsh-anywhere";
 var inject = ["slots", "connection", "layout", "locale", "sessionLogDownload"];
 function fmt(t, key, vars) {
@@ -2223,6 +2202,10 @@ function PocketSettingsTab({ rpcCall, t }) {
       setError(t("namedNeedCfg"));
       return;
     }
+    if (cfg?.mode === "fixed" && !cfg.fixedWanUrl) {
+      setError(t("fixedNeedCfg"));
+      return;
+    }
     setBusy(true);
     setError(null);
     setTunnelState({ phase: "starting", detail: "\u6B63\u5728\u5F00\u542F\u2026", startedAt: Date.now() });
@@ -2251,8 +2234,33 @@ function PocketSettingsTab({ rpcCall, t }) {
   };
   const [tunnelCfg, setTunnelCfg] = (0, import_react2.useState)(null);
   const switchToQuick = async () => {
+    setTunnelCfg(null);
     try {
       setStatus(await call(ANYWHERE_ENDPOINTS.tunnelSetConfig, { mode: "quick" }));
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+  const switchToNamed = async () => {
+    try {
+      setStatus(await call(ANYWHERE_ENDPOINTS.tunnelSetConfig, { mode: "named" }));
+      if (!tunnelModeView.hostname || !tunnelModeView.tokenSet) {
+        setTunnelCfg({ mode: "named", hostname: tunnelModeView.hostname ?? "", token: "", err: null });
+      } else {
+        setTunnelCfg(null);
+      }
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+  const switchToFixed = async () => {
+    try {
+      setStatus(await call(ANYWHERE_ENDPOINTS.tunnelSetConfig, { mode: "fixed" }));
+      if (!tunnelModeView.fixedWanUrl) {
+        setTunnelCfg({ mode: "fixed", fixedWanUrl: "", err: null });
+      } else {
+        setTunnelCfg(null);
+      }
     } catch (err) {
       setError(err.message);
     }
@@ -2264,6 +2272,20 @@ function PocketSettingsTab({ rpcCall, t }) {
         hostname: tunnelCfg?.hostname ?? "",
         token: tunnelCfg?.token || void 0
         // 留空不覆盖已存 Token
+      }));
+      setTunnelCfg(null);
+    } catch (err) {
+      setTunnelCfg((c) => ({ ...c, err: err.message }));
+    }
+  };
+  const saveFixedTunnel = async () => {
+    try {
+      if (!tunnelCfg?.fixedWanUrl?.trim()) {
+        throw new Error(t("fixedNeedCfg"));
+      }
+      setStatus(await call(ANYWHERE_ENDPOINTS.tunnelSetConfig, {
+        mode: "fixed",
+        fixedWanUrl: tunnelCfg.fixedWanUrl.trim()
       }));
       setTunnelCfg(null);
     } catch (err) {
@@ -2365,9 +2387,13 @@ function PocketSettingsTab({ rpcCall, t }) {
   const tunnelStarting = ["downloading", "starting", "registering"].includes(tunnelPhase);
   const tunnelStateDetail = tunnelState?.detail ?? "";
   const tunnelStateStarted = tunnelState?.startedAt ?? null;
-  const tunnelModeView = status?.tunnelConfig ?? { mode: "quick", hostname: "", tokenSet: false };
+  const tunnelModeView = status?.tunnelConfig ?? { mode: "quick", hostname: "", tokenSet: false, fixedWanUrl: "" };
+  const quickMode = tunnelModeView.mode === "quick" || !tunnelModeView.mode;
   const namedMode = tunnelModeView.mode === "named";
-  const namedActive = namedMode || tunnelCfg !== null;
+  const fixedMode = tunnelModeView.mode === "fixed";
+  const quickActive = quickMode && tunnelCfg === null;
+  const namedActive = namedMode && tunnelCfg === null || tunnelCfg?.mode === "named";
+  const fixedActive = fixedMode && tunnelCfg === null || tunnelCfg?.mode === "fixed";
   const errText = (msg) => {
     const s = String(msg ?? "");
     const i = s.indexOf(" | ");
@@ -2435,7 +2461,7 @@ function PocketSettingsTab({ rpcCall, t }) {
         (0, import_react2.createElement)("div", { style: { whiteSpace: "nowrap" } }, t("starAsk")),
         (0, import_react2.createElement)(
           "a",
-          { href: "https://github.com/shaobeichen/dsh-anywhere", target: "_blank", rel: "noreferrer", style: { color: "var(--dsw-alias-brand-primary,#4f6ef7)", fontSize: 12, lineHeight: 1.6, textDecoration: "underline" } },
+          { href: "https://github.com/liushQAQ/dsh-anywhere", target: "_blank", rel: "noreferrer", style: { color: "var(--dsw-alias-brand-primary,#4f6ef7)", fontSize: 12, lineHeight: 1.6, textDecoration: "underline" } },
           t("starCta")
         )
       )
@@ -2556,31 +2582,41 @@ function PocketSettingsTab({ rpcCall, t }) {
         qrArea(status.tunnelQr, tunnelUrl, namedMode ? t("namedRunningHint") : t("wanHint")),
         // 防钓鱼 / 别收藏（issue #82）：公网链接仅本次有效、勿收藏提示
         (0, import_react2.createElement)("div", { style: { marginTop: 8, fontSize: 12, lineHeight: 1.5, borderLeft: "4px solid var(--dsw-alias-state-warn-primary,#b45309)", background: "var(--dsw-alias-bg-layer-2,#f3f4f6)", borderRadius: 8, padding: "8px 10px" } }, t("wanEphemeralWarn")),
-        // 地址模式行（随机/固定；固定域名选中或编辑时高亮）
+        // 地址模式行（随机/固定/自定义；选中或编辑时高亮）
         row(
           t("modeLabel"),
           (0, import_react2.createElement)(
             "span",
             { style: { display: "inline-flex", gap: 6 } },
-            (0, import_react2.createElement)("button", { style: modeBtnStyle(!namedActive), onClick: namedMode ? switchToQuick : tunnelCfg ? () => setTunnelCfg(null) : void 0 }, t("modeQuick")),
-            (0, import_react2.createElement)("button", { style: modeBtnStyle(namedActive), onClick: () => setTunnelCfg(tunnelCfg ? null : { hostname: tunnelModeView.hostname ?? "", token: "", err: null }) }, t("modeNamed"))
+            (0, import_react2.createElement)("button", { style: modeBtnStyle(quickActive), onClick: switchToQuick }, t("modeQuick")),
+            (0, import_react2.createElement)("button", { style: modeBtnStyle(namedActive), onClick: switchToNamed }, t("modeNamed")),
+            (0, import_react2.createElement)("button", { style: modeBtnStyle(fixedActive), onClick: switchToFixed }, t("modeFixed"))
           ),
           (0, import_react2.createElement)(
             "div",
             { style: { marginTop: 6 } },
-            // 刚保存固定域名但当前连接仍是随机域名：需关闭后重新开启才生效
-            namedMode && /trycloudflare\.com/i.test(tunnelUrl ?? "") ? (0, import_react2.createElement)("div", { style: { ...styles.warn } }, t("namedTakeEffect")) : null,
+            // 刚保存固定/自定义域名但当前连接仍是随机域名：需关闭后重新开启才生效
+            (namedMode || fixedMode) && /trycloudflare\.com/i.test(tunnelUrl ?? "") ? (0, import_react2.createElement)("div", { style: { ...styles.warn } }, namedMode ? t("namedTakeEffect") : t("fixedTakeEffect")) : null,
             // 固定域名：已保存摘要 + 修改入口（非编辑态）
-            namedMode && !tunnelCfg ? (0, import_react2.createElement)(
+            namedMode && tunnelCfg?.mode !== "named" ? (0, import_react2.createElement)(
               "div",
               { style: { ...styles.muted } },
               fmt(t, "namedSummary", { host: tunnelModeView.hostname || "\u2014", token: tunnelModeView.tokenSet ? t("namedTokenSet") : t("namedTokenMissing") }),
-              (0, import_react2.createElement)("button", { style: { ...styles.btn, height: 26, padding: "0 10px", fontSize: 12, marginLeft: 8 }, onClick: () => setTunnelCfg({ hostname: tunnelModeView.hostname ?? "", token: "", err: null }) }, t("namedEdit")),
+              (0, import_react2.createElement)("button", { style: { ...styles.btn, height: 26, padding: "0 10px", fontSize: 12, marginLeft: 8 }, onClick: () => setTunnelCfg({ mode: "named", hostname: tunnelModeView.hostname ?? "", token: "", err: null }) }, t("namedEdit")),
               (0, import_react2.createElement)("div", { style: { ...styles.muted, marginTop: 4 } }, t("namedHow")),
               !tunnelModeView.tokenSet || !tunnelModeView.hostname ? (0, import_react2.createElement)("div", { style: { marginTop: 2, color: "var(--dsw-alias-state-error-primary,#dc2626)" } }, t("namedNeedCfg")) : null
             ) : null,
+            // 自定义公网：已保存摘要 + 修改入口（非编辑态）
+            fixedMode && tunnelCfg?.mode !== "fixed" ? (0, import_react2.createElement)(
+              "div",
+              { style: { ...styles.muted } },
+              fmt(t, "fixedSummary", { url: tunnelModeView.fixedWanUrl || "\u2014" }),
+              (0, import_react2.createElement)("button", { style: { ...styles.btn, height: 26, padding: "0 10px", fontSize: 12, marginLeft: 8 }, onClick: () => setTunnelCfg({ mode: "fixed", fixedWanUrl: tunnelModeView.fixedWanUrl ?? "", err: null }) }, t("fixedEdit")),
+              (0, import_react2.createElement)("div", { style: { ...styles.muted, marginTop: 4 } }, t("fixedHow")),
+              !tunnelModeView.fixedWanUrl ? (0, import_react2.createElement)("div", { style: { marginTop: 2, color: "var(--dsw-alias-state-error-primary,#dc2626)" } }, t("fixedNeedCfg")) : null
+            ) : null,
             // 固定域名：编辑表单（域名 + Tunnel Token，Token 留空保持不变）
-            tunnelCfg ? (0, import_react2.createElement)(
+            tunnelCfg?.mode === "named" ? (0, import_react2.createElement)(
               "div",
               { style: { marginTop: 6, fontSize: 12, color: "var(--dsw-alias-label-secondary,#6b7280)", lineHeight: 1.6 } },
               (0, import_react2.createElement)(
@@ -2622,6 +2658,35 @@ function PocketSettingsTab({ rpcCall, t }) {
               ),
               (0, import_react2.createElement)("div", { style: { ...styles.muted, marginTop: 6 } }, t("namedHow")),
               (0, import_react2.createElement)("div", { style: { marginTop: 2, fontSize: 11, color: "var(--dsw-alias-state-warn-primary,#b45309)", lineHeight: 1.5 } }, t("namedSecurity")),
+              tunnelCfg.err ? (0, import_react2.createElement)("div", { style: { color: "var(--dsw-alias-state-error-primary,#dc2626)", marginTop: 4 } }, errText(tunnelCfg.err)) : null
+            ) : null,
+            // 自定义公网：编辑表单（直接输入完整的公网访问 URL）
+            tunnelCfg?.mode === "fixed" ? (0, import_react2.createElement)(
+              "div",
+              { style: { marginTop: 6, fontSize: 12, color: "var(--dsw-alias-label-secondary,#6b7280)", lineHeight: 1.6 } },
+              (0, import_react2.createElement)(
+                "div",
+                null,
+                t("fixedUrlLabel"),
+                (0, import_react2.createElement)("input", {
+                  style: { margin: "4px 0 0 6px", padding: "4px 8px", fontSize: 13, border: "1px solid var(--dsw-alias-border-l2,#d1d5db)", borderRadius: 6, outline: "none", width: 260 },
+                  placeholder: "http://your-server-ip:3081 \u6216 https://abc.xyz.com",
+                  value: tunnelCfg.fixedWanUrl ?? "",
+                  autoFocus: true,
+                  onChange: (e) => setTunnelCfg((c) => ({ ...c, fixedWanUrl: e.target.value.trim(), err: null })),
+                  onKeyDown: (e) => {
+                    if (e.key === "Enter") saveFixedTunnel();
+                    if (e.key === "Escape") setTunnelCfg(null);
+                  }
+                })
+              ),
+              (0, import_react2.createElement)(
+                "div",
+                { style: { marginTop: 6, display: "flex", gap: 8 } },
+                (0, import_react2.createElement)("button", { style: { ...styles.btn, height: 26, padding: "0 10px", fontSize: 12 }, onClick: saveFixedTunnel }, t("save")),
+                (0, import_react2.createElement)("button", { style: { ...styles.btn, height: 26, padding: "0 10px", fontSize: 12 }, onClick: () => setTunnelCfg(null) }, t("cancel"))
+              ),
+              (0, import_react2.createElement)("div", { style: { ...styles.muted, marginTop: 6 } }, t("fixedHow")),
               tunnelCfg.err ? (0, import_react2.createElement)("div", { style: { color: "var(--dsw-alias-state-error-primary,#dc2626)", marginTop: 4 } }, errText(tunnelCfg.err)) : null
             ) : null
           )
@@ -2730,7 +2795,7 @@ function PocketSettingsTab({ rpcCall, t }) {
       { style: { ...styles.block, textAlign: "center" } },
       (0, import_react2.createElement)(
         "a",
-        { href: "https://github.com/shaobeichen/dsh-anywhere/issues", target: "_blank", rel: "noreferrer", style: { fontSize: 12, color: "var(--dsw-alias-label-secondary,#6b7280)", textDecoration: "none" } },
+        { href: "https://github.com/liushQAQ/dsh-anywhere/issues", target: "_blank", rel: "noreferrer", style: { fontSize: 12, color: "var(--dsw-alias-label-secondary,#6b7280)", textDecoration: "none" } },
         t("feedback")
       )
     )
@@ -2764,59 +2829,6 @@ function apply(ctx) {
       PocketSettingsTab
     )
   );
-  // ANYWHERE-LIVE-FIX v1: sessions created in another dsh instance (phone,
-  // WeChat, a second desktop window) never reach this page on their own --
-  // the host only emits api-session/added in the process that created the
-  // session, and the client only re-lists on connection-generation changes.
-  // Funnel cross-instance workspace activity, window focus and a slow
-  // interval into the public sessions.refresh() API.
-  ctx.effect(() => {
-    let debounce = null;
-    let disposed = false;
-    const refresh = () => {
-      if (disposed) return;
-      try {
-        const sessions = ctx.get("sessions");
-        if (sessions && typeof sessions.refresh === "function") sessions.refresh();
-      } catch {
-      }
-    };
-    const schedule = () => {
-      if (disposed || debounce !== null) return;
-      debounce = setTimeout(() => {
-        debounce = null;
-        refresh();
-      }, 1200);
-    };
-    const onFocus = () => schedule();
-    const onVisibility = () => {
-      if (document.visibilityState === "visible") schedule();
-    };
-    const interval = setInterval(refresh, 2e4);
-    window.addEventListener("focus", onFocus);
-    document.addEventListener("visibilitychange", onVisibility);
-    let unsubscribe;
-    try {
-      const workspaces = ctx.get("workspaces");
-      const list = workspaces && workspaces.list;
-      if (list && typeof list.subscribe === "function") unsubscribe = list.subscribe(schedule);
-    } catch {
-    }
-    schedule();
-    return () => {
-      disposed = true;
-      if (debounce !== null) clearTimeout(debounce);
-      clearInterval(interval);
-      window.removeEventListener("focus", onFocus);
-      document.removeEventListener("visibilitychange", onVisibility);
-      if (typeof unsubscribe === "function") {
-        try {
-          unsubscribe();
-        } catch {
-        }
-      }
-    };
-  }, "dsh-live-sidebar: cross-instance session list refresh");
 }
 
     return module.exports;

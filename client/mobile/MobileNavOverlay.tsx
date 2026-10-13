@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useState } from 'react'
 import type { PropsLocale, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
-import { IconPanelLeftOutline16 } from '@deepseek-ai/dsh-client-ui-primitives'
+import { IconPanelLeftOutlineRegular } from '@deepseek-ai/dsh-client-ui-primitives'
 import { NS } from './locales.ts'
 import {
   DRAWER_SELECTOR,
@@ -184,23 +184,17 @@ export function MobileNavOverlay({ toggleSidebar, t }: MobileNavOverlayProps) {
     }
 
     const onDrawerClick = (event: MouseEvent): void => {
-      // A touch row tap owns the close through the selection observer. Let the
-      // browser click reach React without a capture-phase close racing it.
       if (performance.now() < suppressTouchClickUntil) return
-      if (
-        pendingTouchRow !== null
-        && performance.now() - lastTouchNavAt < 500
-        && isPendingTouchClick(event)
-      ) {
-        const target = navigationTarget(event.target)
-        const row = target?.closest('[role="treeitem"]')
-        if (row !== null && row !== undefined) {
-          pendingTouchRow = row
-          navClickArrived = true
-          return
-        }
+      const target = navigationTarget(event.target)
+      if (target !== null) {
+        // 用户点击了会话行或新会话等导航项：延时 100ms 让 React 完成路由与状态更新，随后必关抽屉
+        setTimeout(() => {
+          const frame = document.querySelector('[data-mobile-nav="frame"]')
+          if (frame !== null && !frame.hasAttribute('data-sidebar-collapsed')) {
+            toggleSidebar()
+          }
+        }, 100)
       }
-      if (navigationTarget(event.target) !== null) toggleSidebar()
     }
 
     const onDrawerPointerUp = (event: PointerEvent): void => {
@@ -211,21 +205,15 @@ export function MobileNavOverlay({ toggleSidebar, t }: MobileNavOverlayProps) {
       const row = target.closest('[role="treeitem"]')
       if (row !== null) {
         if (row.getAttribute('aria-selected') === 'true') {
-          // Already-selected rows will not navigate; closing now is safe.
           suppressTouchClickUntil = performance.now() + 500
           toggleSidebar()
         } else {
-          // Let React navigate first, then close on the selection mutation.
           lastTouchNavAt = performance.now()
           lastTouchX = event.clientX
           lastTouchY = event.clientY
           armNav(row)
         }
-        return
       }
-
-      // Non-row targets keep their existing click path; only host
-      // session/search rows participate in the selected-state hand-off.
     }
 
     document.addEventListener('click', onDrawerClick, true)
@@ -282,7 +270,7 @@ export function MobileNavOverlay({ toggleSidebar, t }: MobileNavOverlayProps) {
           title={t('open')}
           onClick={() => toggleSidebar()}
         >
-          <IconPanelLeftOutline16 size={18} />
+          <IconPanelLeftOutlineRegular size={18} />
         </button>
       )}
     </>

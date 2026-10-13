@@ -2,7 +2,17 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { build } from 'esbuild';
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
+let esbuild;
+try {
+  esbuild = require('esbuild');
+} catch {
+  // 尝试引用本地已安装的 esbuild 依赖
+  esbuild = require('E:/desktop/所有skill/mimo/2026-09-23/https-github-com-tashfeenahmed-freellmapi-git/freellmapi-main/node_modules/esbuild');
+}
+const { build } = esbuild;
 
 const sourceDir = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(sourceDir, '..');
