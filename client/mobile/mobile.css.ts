@@ -312,6 +312,31 @@ export const MOBILE_CSS = `
   background: inherit !important;
 }
 
+/* 右侧栏 / Diff 代码对比 / 文件预览 / CHANGES 全屏抽屉（老总铁律：严格避让顶部状态栏与底栏） */
+[class*="rightbarCol"],
+.CZPbNW_rightbarCol,
+[data-slot="sidebar.right"],
+.dMHGga_session,
+[class*="dMHGga_root"],
+.YdIzba_header,
+[class*="YdIzba_root"],
+[data-dockkit-surface],
+[data-dockkit-strip],
+[data-aionui-preview-col] {
+  padding-top: calc(var(--dsh-statusbar, 54px) + 6px) !important;
+  box-sizing: border-box !important;
+}
+
+[class*="rightbarCol"],
+.CZPbNW_rightbarCol {
+  padding-bottom: max(16px, env(safe-area-inset-bottom)) !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  max-height: 100vh !important;
+  max-height: 100dvh !important;
+  overflow: hidden !important;
+}
+
 /* 侧栏收起时彻底隐藏抽屉内部残留的切换按钮，杜绝屏幕左边缘天上露出半个多余小按钮 */
 [data-sidebar-collapsed] [class*="WYye1W_toggle"],
 [data-sidebar-collapsed] button[aria-label="打开侧边栏"] {
@@ -643,31 +668,81 @@ export const MOBILE_CSS = `
     width: 100% !important;
     box-sizing: border-box !important;
   }
-  /* 会话标题与智能体团队整组靠右（老总定版：margin-left: auto 吃掉左侧空白推至最右） */
-  [data-phase] header [class*="titleCluster"],
-  [data-phase] header [class$="_titleCluster"],
-  .ank0OG_titleCluster {
-    flex: 0 1 auto !important;
-    margin-left: auto !important;
+  /* 移动端顶栏布局规范（老总定版）：
+     1. 左侧最左边保留 [打开目录] 按钮；
+     2. 中间会话标题 (crumbs) 居中对齐，单行超出平滑省略截断；
+     3. 右侧智能体团队、后台任务、右侧侧边栏按钮靠最右排列；
+     4. 顶栏背景始终保持透明！ */
+  .ank0OG_titleRow,
+  [data-phase] header [class*="titleRow"] {
+    position: relative !important;
     display: flex !important;
     align-items: center !important;
-    gap: 6px !important;
-    min-width: 0 !important;
-    overflow: hidden !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
   [data-phase] header [class*="crumbs"],
-  [data-phase] header [class$="_crumbs"] {
+  [data-phase] header [class$="_crumbs"],
+  .ank0OG_crumbs {
+    position: absolute !important;
+    left: 54px !important;
+    right: 96px !important;
+    margin: 0 auto !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    max-width: calc(100% - 150px) !important;
     min-width: 0 !important;
-    flex: 0 1 auto !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    pointer-events: auto !important;
   }
   [data-phase] header button[class*="_crumb"],
-  [data-phase] header span[class*="_crumb"] {
-    max-width: 38vw !important;
+  [data-phase] header span[class*="_crumb"],
+  .ank0OG_crumbs *,
+  .ank0OG_crumb,
+  .ank0OG_crumbCurrent,
+  .ank0OG_crumbSeg {
+    max-width: 100% !important;
+    min-width: 0 !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     white-space: nowrap !important;
+    display: inline-block !important;
+    text-align: center !important;
+    word-break: keep-all !important;
+  }
+  /* 右侧智能体团队与操作按钮组：自动靠最右对齐 */
+  [data-phase] header [class*="titleCluster"],
+  [data-phase] header [class$="_titleCluster"],
+  .ank0OG_titleCluster,
+  .ank0OG_headerActions {
+    margin-left: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+  }
+  /* 智能体团队及顶栏操作按钮：强制绝对抗挤压、不收缩、不折行、完整保持横排药丸 */
+  [data-phase] header [class*="titleCluster"] > :not([class*="crumbs"]):not([class$="_crumbs"]),
+  [data-phase] header [class*="titleCluster"] button,
+  .ank0OG_titleCluster button,
+  button[aria-label="智能体团队"],
+  button[aria-label*="智能体团队"],
+  button[title*="智能体团队"],
+  [class*="agentTeam"],
+  [data-agent-team-button] {
+    flex: 0 0 auto !important;
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+    min-width: max-content !important;
+    word-break: keep-all !important;
+    display: inline-flex !important;
+    align-items: center !important;
   }
   /* The directory toggle sits at the far left of the header */
   [data-mobile-nav="toggle"] {

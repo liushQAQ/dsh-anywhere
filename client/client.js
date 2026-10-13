@@ -28,7 +28,7 @@ var __copyProps = (to, from, except, desc) => {
 };
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-// ../packages/dsh-anywhere/client/index.jsx
+// client/index.jsx
 var index_exports = {};
 __export(index_exports, {
   apply: () => apply,
@@ -39,7 +39,7 @@ __export(index_exports, {
 module.exports = __toCommonJS(index_exports);
 var import_react2 = require("react");
 
-// ../packages/dsh-anywhere/client/api.js
+// client/api.js
 var ANYWHERE_RPC_CHANNEL = "/dsh-anywhere";
 var ANYWHERE_ENDPOINTS = Object.freeze({
   status: "anywhere.status",
@@ -105,7 +105,7 @@ function redactStatus(s) {
   };
 }
 
-// ../packages/dsh-anywhere/client/mobile/MobileNavToggle.tsx
+// client/mobile/MobileNavToggle.tsx
 var import_dsh_client_ui_primitives = require("@deepseek-ai/dsh-client-ui-primitives");
 function MobileNavToggle({ toggleSidebar, t }) {
   const toggleExplorer = () => {
@@ -140,11 +140,11 @@ function MobileNavToggle({ toggleSidebar, t }) {
   ));
 }
 
-// ../packages/dsh-anywhere/client/mobile/MobileNavOverlay.tsx
+// client/mobile/MobileNavOverlay.tsx
 var import_react = require("react");
 var import_dsh_client_ui_primitives2 = require("@deepseek-ai/dsh-client-ui-primitives");
 
-// ../packages/dsh-anywhere/client/mobile/nav-targets.mjs
+// client/mobile/nav-targets.mjs
 var DRAWER_SELECTOR = '[data-mobile-nav="frame"] > :first-child';
 var TOGGLE_SELECTOR = '[data-mobile-nav="toggle"]';
 var NAV_TARGETS = [
@@ -177,7 +177,7 @@ function isOverlayTap(target) {
   return target.closest(OVERLAY_SELECTOR) !== null;
 }
 
-// ../packages/dsh-anywhere/client/mobile/MobileNavOverlay.tsx
+// client/mobile/MobileNavOverlay.tsx
 var MOBILE_QUERY = "(max-width: 1023px)";
 function useMobile() {
   const [mobile, setMobile] = (0, import_react.useState)(() => window.matchMedia(MOBILE_QUERY).matches);
@@ -366,7 +366,7 @@ function MobileNavOverlay({ toggleSidebar, t }) {
   ));
 }
 
-// ../packages/dsh-anywhere/client/mobile/MobileDrawerFooter.tsx
+// client/mobile/MobileDrawerFooter.tsx
 var import_dsh_client_ui_primitives3 = require("@deepseek-ai/dsh-client-ui-primitives");
 function MobileDrawerFooter({ useSessions, downloadSessionLog, toggleSidebar, t }) {
   const sessionId = useSessions((state) => state.current);
@@ -402,7 +402,7 @@ function MobileDrawerFooter({ useSessions, downloadSessionLog, toggleSidebar, t 
   ));
 }
 
-// ../packages/dsh-anywhere/client/mobile/fileGuard.ts
+// client/mobile/fileGuard.ts
 var GUARD_MSG = "\u624B\u673A\u4E0A\u65E0\u6CD5\u76F4\u63A5\u6253\u5F00\u7535\u8111\u4E0A\u7684\u6587\u4EF6";
 var WS_LABELS = ["\u6DFB\u52A0\u5DE5\u4F5C\u533A", "\u6DFB\u52A0\u5DE5\u4F5C\u533A\u2026", "Add workspace", "Add workspace\u2026"];
 var COPY_LABEL = "\u590D\u5236";
@@ -565,7 +565,7 @@ function startFileGuard(readFile) {
   };
 }
 
-// ../packages/dsh-anywhere/client/mobile/mobile.css.ts
+// client/mobile/mobile.css.ts
 var MOBILE_CSS = `
 /* ---------- base control styles (rendered at any width, hidden where unused) ---------- */
 
@@ -863,6 +863,31 @@ var MOBILE_CSS = `
   border-top: 1px solid var(--dsw-alias-border-l1, rgba(0,0,0,0.08)) !important;
   position: static !important;
   background: inherit !important;
+}
+
+/* \u53F3\u4FA7\u680F / Diff \u4EE3\u7801\u5BF9\u6BD4 / \u6587\u4EF6\u9884\u89C8 / CHANGES \u5168\u5C4F\u62BD\u5C49\uFF08\u8001\u603B\u94C1\u5F8B\uFF1A\u4E25\u683C\u907F\u8BA9\u9876\u90E8\u72B6\u6001\u680F\u4E0E\u5E95\u680F\uFF09 */
+[class*="rightbarCol"],
+.CZPbNW_rightbarCol,
+[data-slot="sidebar.right"],
+.dMHGga_session,
+[class*="dMHGga_root"],
+.YdIzba_header,
+[class*="YdIzba_root"],
+[data-dockkit-surface],
+[data-dockkit-strip],
+[data-aionui-preview-col] {
+  padding-top: calc(var(--dsh-statusbar, 54px) + 6px) !important;
+  box-sizing: border-box !important;
+}
+
+[class*="rightbarCol"],
+.CZPbNW_rightbarCol {
+  padding-bottom: max(16px, env(safe-area-inset-bottom)) !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  max-height: 100vh !important;
+  max-height: 100dvh !important;
+  overflow: hidden !important;
 }
 
 /* \u4FA7\u680F\u6536\u8D77\u65F6\u5F7B\u5E95\u9690\u85CF\u62BD\u5C49\u5185\u90E8\u6B8B\u7559\u7684\u5207\u6362\u6309\u94AE\uFF0C\u675C\u7EDD\u5C4F\u5E55\u5DE6\u8FB9\u7F18\u5929\u4E0A\u9732\u51FA\u534A\u4E2A\u591A\u4F59\u5C0F\u6309\u94AE */
@@ -1196,31 +1221,81 @@ var MOBILE_CSS = `
     width: 100% !important;
     box-sizing: border-box !important;
   }
-  /* \u4F1A\u8BDD\u6807\u9898\u4E0E\u667A\u80FD\u4F53\u56E2\u961F\u6574\u7EC4\u9760\u53F3\uFF08\u8001\u603B\u5B9A\u7248\uFF1Amargin-left: auto \u5403\u6389\u5DE6\u4FA7\u7A7A\u767D\u63A8\u81F3\u6700\u53F3\uFF09 */
-  [data-phase] header [class*="titleCluster"],
-  [data-phase] header [class$="_titleCluster"],
-  .ank0OG_titleCluster {
-    flex: 0 1 auto !important;
-    margin-left: auto !important;
+  /* \u79FB\u52A8\u7AEF\u9876\u680F\u5E03\u5C40\u89C4\u8303\uFF08\u8001\u603B\u5B9A\u7248\uFF09\uFF1A
+     1. \u5DE6\u4FA7\u6700\u5DE6\u8FB9\u4FDD\u7559 [\u6253\u5F00\u76EE\u5F55] \u6309\u94AE\uFF1B
+     2. \u4E2D\u95F4\u4F1A\u8BDD\u6807\u9898 (crumbs) \u5C45\u4E2D\u5BF9\u9F50\uFF0C\u5355\u884C\u8D85\u51FA\u5E73\u6ED1\u7701\u7565\u622A\u65AD\uFF1B
+     3. \u53F3\u4FA7\u667A\u80FD\u4F53\u56E2\u961F\u3001\u540E\u53F0\u4EFB\u52A1\u3001\u53F3\u4FA7\u4FA7\u8FB9\u680F\u6309\u94AE\u9760\u6700\u53F3\u6392\u5217\uFF1B
+     4. \u9876\u680F\u80CC\u666F\u59CB\u7EC8\u4FDD\u6301\u900F\u660E\uFF01 */
+  .ank0OG_titleRow,
+  [data-phase] header [class*="titleRow"] {
+    position: relative !important;
     display: flex !important;
     align-items: center !important;
-    gap: 6px !important;
-    min-width: 0 !important;
-    overflow: hidden !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
   [data-phase] header [class*="crumbs"],
-  [data-phase] header [class$="_crumbs"] {
+  [data-phase] header [class$="_crumbs"],
+  .ank0OG_crumbs {
+    position: absolute !important;
+    left: 54px !important;
+    right: 96px !important;
+    margin: 0 auto !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    max-width: calc(100% - 150px) !important;
     min-width: 0 !important;
-    flex: 0 1 auto !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    pointer-events: auto !important;
   }
   [data-phase] header button[class*="_crumb"],
-  [data-phase] header span[class*="_crumb"] {
-    max-width: 38vw !important;
+  [data-phase] header span[class*="_crumb"],
+  .ank0OG_crumbs *,
+  .ank0OG_crumb,
+  .ank0OG_crumbCurrent,
+  .ank0OG_crumbSeg {
+    max-width: 100% !important;
+    min-width: 0 !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     white-space: nowrap !important;
+    display: inline-block !important;
+    text-align: center !important;
+    word-break: keep-all !important;
+  }
+  /* \u53F3\u4FA7\u667A\u80FD\u4F53\u56E2\u961F\u4E0E\u64CD\u4F5C\u6309\u94AE\u7EC4\uFF1A\u81EA\u52A8\u9760\u6700\u53F3\u5BF9\u9F50 */
+  [data-phase] header [class*="titleCluster"],
+  [data-phase] header [class$="_titleCluster"],
+  .ank0OG_titleCluster,
+  .ank0OG_headerActions {
+    margin-left: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+  }
+  /* \u667A\u80FD\u4F53\u56E2\u961F\u53CA\u9876\u680F\u64CD\u4F5C\u6309\u94AE\uFF1A\u5F3A\u5236\u7EDD\u5BF9\u6297\u6324\u538B\u3001\u4E0D\u6536\u7F29\u3001\u4E0D\u6298\u884C\u3001\u5B8C\u6574\u4FDD\u6301\u6A2A\u6392\u836F\u4E38 */
+  [data-phase] header [class*="titleCluster"] > :not([class*="crumbs"]):not([class$="_crumbs"]),
+  [data-phase] header [class*="titleCluster"] button,
+  .ank0OG_titleCluster button,
+  button[aria-label="\u667A\u80FD\u4F53\u56E2\u961F"],
+  button[aria-label*="\u667A\u80FD\u4F53\u56E2\u961F"],
+  button[title*="\u667A\u80FD\u4F53\u56E2\u961F"],
+  [class*="agentTeam"],
+  [data-agent-team-button] {
+    flex: 0 0 auto !important;
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+    min-width: max-content !important;
+    word-break: keep-all !important;
+    display: inline-flex !important;
+    align-items: center !important;
   }
   /* The directory toggle sits at the far left of the header */
   [data-mobile-nav="toggle"] {
@@ -1794,7 +1869,7 @@ var MOBILE_CSS = `
 
 `;
 
-// ../packages/dsh-anywhere/client/mobile/locales.ts
+// client/mobile/locales.ts
 var NS = "mobileNav";
 var zh = {
   "open": "\u6253\u5F00\u76EE\u5F55",
@@ -1811,7 +1886,7 @@ var en = {
   "files": "Files"
 };
 
-// ../packages/dsh-anywhere/client/mobile/layout-mode.mjs
+// client/mobile/layout-mode.mjs
 function resolveLayout({ urlValue, stored, narrowMatch }) {
   const url = String(urlValue ?? "").trim();
   if (url === "desktop") return "desktop";
@@ -1835,7 +1910,7 @@ function persistLayoutFromUrl(urlValue) {
   }
 }
 
-// ../packages/dsh-anywhere/client/mobile/mobile-apply.tsx
+// client/mobile/mobile-apply.tsx
 function mobileApply(ctx) {
   const urlValue = new URL(window.location.href).searchParams.get("dsh-layout") ?? "";
   const narrowMQ = window.matchMedia("(max-width: 1023px)");
@@ -2088,7 +2163,7 @@ function mobileApply(ctx) {
   }, MobileDrawerFooter));
 }
 
-// ../packages/dsh-anywhere/client/anywhere-locales.js
+// client/anywhere-locales.js
 var NS2 = "anywhere";
 var zh2 = {
   "section": "\u624B\u673A\u8BBF\u95EE",
@@ -2299,7 +2374,7 @@ var en2 = {
   "feedback": "\u{1F64F} Questions? Open an issue on GitHub"
 };
 
-// ../packages/dsh-anywhere/client/index.jsx
+// client/index.jsx
 var name = "dsh-anywhere";
 var inject = ["slots", "connection", "layout", "locale", "sessionLogDownload"];
 function fmt(t, key, vars) {
