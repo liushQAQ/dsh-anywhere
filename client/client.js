@@ -666,14 +666,13 @@ var MOBILE_CSS = `
 }
 
 /* Dimmed backdrop under the open drawer; above every column, below the drawer.
-   pointer-events: none \u2014\u2014 \u70B9\u51FB\u7A7F\u900F\uFF08issue #38\uFF09\uFF1Abackdrop \u53EA\u8D1F\u8D23\u89C6\u89C9\u538B\u6697\uFF0C
-   \u4E0D\u62A2\u70B9\u51FB\u3002\u5173\u95ED\u62BD\u5C49\u6539\u7531 MobileNavOverlay \u7684 document \u7EA7\u300C\u62BD\u5C49\u5916\u70B9\u51FB\u300D\u76D1\u542C\u5904\u7406
-   \uFF08\u7B49\u4EF7\u4E8E\u539F\u6765\u7684\u70B9\u51FB\u906E\u7F69\u5173\u95ED\uFF0C\u4E14\u62BD\u5C49\u5185\u70B9\u51FB\u4E0D\u518D\u88AB backdrop \u5403\u6389\uFF09\u3002 */
+   \u91C7\u7528 fixed \u5168\u5C4F\u8986\u76D6\uFF0C\u5C42\u7EA7\u8BBE\u4E3A 1100\uFF0C\u5F7B\u5E95\u8986\u76D6\u5305\u62EC\u9876\u90E8\u72B6\u6001\u680F\u4E0E\u9876\u680F\u5728\u5185\u7684\u6574\u4E2A\u89C6\u53E3\uFF0C
+   \u675C\u7EDD\u4EFB\u4F55\u9876\u680F\u767D\u6761\u9732\u5E95\uFF0C\u62BD\u5C49\uFF08z-index 1200\uFF09\u5728\u5176\u4E0A\u65B9\u6D6E\u73B0\u3002 */
 [data-mobile-nav="backdrop"] {
-  position: absolute;
-  inset: 0;
-  z-index: 30;
-  background: rgba(0, 0, 0, .45);
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 1100 !important;
+  background: rgba(0, 0, 0, .45) !important;
   pointer-events: none;
   animation: dsh-mobile-nav-fade .2s var(--ds-ease-in-out, ease-in-out);
   -webkit-tap-highlight-color: transparent;
@@ -960,47 +959,78 @@ var MOBILE_CSS = `
   }
 
   /* --- Session header on mobile ---
-     Layout goal: [toggle] [session title] [mode badge] in a row, with the
-     Session log capsule removed from the header (relocated to the drawer
-     footer). Stable structural hooks only:
-       [data-phase] header                     the session header element
-       header > :first-child                   titleRow (titleCluster + utilities)
-       header > :first-child > :last-child     headerUtilities (Session log seat) */
-  [data-phase] header {
+     \u79FB\u52A8\u7AEF\u9876\u680F\u5E03\u5C40\u89C4\u8303\uFF08\u8001\u603B\u5B9A\u7248\uFF09\uFF1A
+     1. \u5DE6\u4FA7\u6700\u5DE6\u8FB9\u4FDD\u7559 [\u6253\u5F00\u76EE\u5F55] \u6309\u94AE\uFF08\u7EDD\u5BF9\u5B9A\u4F4D\u9489\u5728\u5DE6\u4FA7\uFF09\uFF1B
+     2. \u4E2D\u95F4\u5F39\u6027\u7A7A\u767D\u81EA\u52A8\u63A8\u5F00\uFF1B
+     3. \u4F1A\u8BDD\u6807\u9898 (crumbs)\u3001\u667A\u80FD\u4F53\u56E2\u961F\u6309\u94AE\u3001\u53F3\u4FA7\u4FA7\u8FB9\u680F\u6309\u94AE\u5168\u90E8\u9760\u53F3\u5BF9\u9F50\uFF01
+     4. \u9876\u680F\u80CC\u666F\u59CB\u7EC8\u4FDD\u6301\u900F\u660E\uFF0C\u62BD\u5C49\u6253\u5F00\u65F6\u7EDD\u4E0D\u51FA\u73B0\u767D\u8272\u80CC\u666F\u6761\uFF01 */
+  html body header,
+  html body [data-phase] header,
+  html body [data-conversation-header],
+  html body .ank0OG_header {
+    background: transparent !important;
+    background-color: transparent !important;
     padding: 8px 12px 0 !important;
   }
-  /* The directory and Files controls are absolutely positioned, so reserve
-     their lanes and let the title use the remaining width without squeezing. */
-  [data-phase] header > :first-child {
-    min-height: 36px !important;
-    padding: 0 32px !important;
+  /* \u4FA7\u680F\u62BD\u5C49\u6253\u5F00\u72B6\u6001\u4E0B\uFF0C\u6574\u4E2A\u4E3B\u5185\u5BB9\u533A\u9876\u680F\u80CC\u666F\u7EDD\u5BF9\u900F\u660E\uFF0C\u4E0D\u8BB8\u6709\u767D\u8272\u80CC\u666F */
+  [data-mobile-nav="frame"]:not([data-sidebar-collapsed]) header,
+  [data-mobile-nav="frame"]:not([data-sidebar-collapsed]) [data-conversation-header],
+  [data-mobile-nav="frame"]:not([data-sidebar-collapsed]) .ank0OG_header,
+  [data-mobile-nav="frame"]:not([data-sidebar-collapsed]) > :nth-child(2) {
+    background: transparent !important;
+    background-color: transparent !important;
   }
+  [data-phase] header > :first-child {
+    position: relative !important;
+    min-height: 36px !important;
+    padding: 0 40px 0 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  /* \u4F1A\u8BDD\u6807\u9898\u4E0E\u667A\u80FD\u4F53\u56E2\u961F\u6574\u7EC4\u9760\u53F3\uFF08\u8001\u603B\u5B9A\u7248\uFF1Amargin-left: auto \u5403\u6389\u5DE6\u4FA7\u7A7A\u767D\u63A8\u81F3\u6700\u53F3\uFF09 */
+  [data-phase] header [class*="titleCluster"],
   [data-phase] header [class$="_titleCluster"],
+  .ank0OG_titleCluster {
+    flex: 0 1 auto !important;
+    margin-left: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+  [data-phase] header [class*="crumbs"],
   [data-phase] header [class$="_crumbs"] {
     min-width: 0 !important;
+    flex: 0 1 auto !important;
   }
-  [data-phase] header button[class*="_crumb"] {
-    max-width: calc(100vw - 104px) !important;
+  [data-phase] header button[class*="_crumb"],
+  [data-phase] header span[class*="_crumb"] {
+    max-width: 38vw !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
   }
-  /* The directory toggle sits at the far left of the header (the header
-     is position:relative; the data-slot wrappers are display:contents). */
+  /* The directory toggle sits at the far left of the header */
   [data-mobile-nav="toggle"] {
     position: absolute !important;
     left: 8px !important;
-    top: 12px !important;
-    z-index: 2 !important;
+    top: 4px !important;
+    transform: none !important;
+    z-index: 10 !important;
   }
-  /* The Files action sits at the FAR RIGHT of the header so it reads as a
-     distinct control from the directory toggle on the left (which opens
-     the history sidebar). */
+  /* The Files action sits at the FAR RIGHT of the header */
   [data-mobile-nav="files"] {
     position: absolute !important;
     left: auto !important;
     right: 8px !important;
-    top: 12px !important;
-    z-index: 2 !important;
+    top: 4px !important;
+    transform: none !important;
+    z-index: 10 !important;
   }
   /* Session log download: gone from the header row on mobile (the utilities
      seat holds only the session-log-export capsule). */

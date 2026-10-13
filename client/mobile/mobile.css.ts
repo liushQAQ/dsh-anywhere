@@ -113,14 +113,13 @@ export const MOBILE_CSS = `
 }
 
 /* Dimmed backdrop under the open drawer; above every column, below the drawer.
-   pointer-events: none —— 点击穿透（issue #38）：backdrop 只负责视觉压暗，
-   不抢点击。关闭抽屉改由 MobileNavOverlay 的 document 级「抽屉外点击」监听处理
-   （等价于原来的点击遮罩关闭，且抽屉内点击不再被 backdrop 吃掉）。 */
+   采用 fixed 全屏覆盖，层级设为 1100，彻底覆盖包括顶部状态栏与顶栏在内的整个视口，
+   杜绝任何顶栏白条露底，抽屉（z-index 1200）在其上方浮现。 */
 [data-mobile-nav="backdrop"] {
-  position: absolute;
-  inset: 0;
-  z-index: 30;
-  background: rgba(0, 0, 0, .45);
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 1100 !important;
+  background: rgba(0, 0, 0, .45) !important;
   pointer-events: none;
   animation: dsh-mobile-nav-fade .2s var(--ds-ease-in-out, ease-in-out);
   -webkit-tap-highlight-color: transparent;
@@ -407,47 +406,78 @@ export const MOBILE_CSS = `
   }
 
   /* --- Session header on mobile ---
-     Layout goal: [toggle] [session title] [mode badge] in a row, with the
-     Session log capsule removed from the header (relocated to the drawer
-     footer). Stable structural hooks only:
-       [data-phase] header                     the session header element
-       header > :first-child                   titleRow (titleCluster + utilities)
-       header > :first-child > :last-child     headerUtilities (Session log seat) */
-  [data-phase] header {
+     移动端顶栏布局规范（老总定版）：
+     1. 左侧最左边保留 [打开目录] 按钮（绝对定位钉在左侧）；
+     2. 中间弹性空白自动推开；
+     3. 会话标题 (crumbs)、智能体团队按钮、右侧侧边栏按钮全部靠右对齐！
+     4. 顶栏背景始终保持透明，抽屉打开时绝不出现白色背景条！ */
+  html body header,
+  html body [data-phase] header,
+  html body [data-conversation-header],
+  html body .ank0OG_header {
+    background: transparent !important;
+    background-color: transparent !important;
     padding: 8px 12px 0 !important;
   }
-  /* The directory and Files controls are absolutely positioned, so reserve
-     their lanes and let the title use the remaining width without squeezing. */
-  [data-phase] header > :first-child {
-    min-height: 36px !important;
-    padding: 0 32px !important;
+  /* 侧栏抽屉打开状态下，整个主内容区顶栏背景绝对透明，不许有白色背景 */
+  [data-mobile-nav="frame"]:not([data-sidebar-collapsed]) header,
+  [data-mobile-nav="frame"]:not([data-sidebar-collapsed]) [data-conversation-header],
+  [data-mobile-nav="frame"]:not([data-sidebar-collapsed]) .ank0OG_header,
+  [data-mobile-nav="frame"]:not([data-sidebar-collapsed]) > :nth-child(2) {
+    background: transparent !important;
+    background-color: transparent !important;
   }
+  [data-phase] header > :first-child {
+    position: relative !important;
+    min-height: 36px !important;
+    padding: 0 40px 0 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  /* 会话标题与智能体团队整组靠右（老总定版：margin-left: auto 吃掉左侧空白推至最右） */
+  [data-phase] header [class*="titleCluster"],
   [data-phase] header [class$="_titleCluster"],
+  .ank0OG_titleCluster {
+    flex: 0 1 auto !important;
+    margin-left: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+  [data-phase] header [class*="crumbs"],
   [data-phase] header [class$="_crumbs"] {
     min-width: 0 !important;
+    flex: 0 1 auto !important;
   }
-  [data-phase] header button[class*="_crumb"] {
-    max-width: calc(100vw - 104px) !important;
+  [data-phase] header button[class*="_crumb"],
+  [data-phase] header span[class*="_crumb"] {
+    max-width: 38vw !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
   }
-  /* The directory toggle sits at the far left of the header (the header
-     is position:relative; the data-slot wrappers are display:contents). */
+  /* The directory toggle sits at the far left of the header */
   [data-mobile-nav="toggle"] {
     position: absolute !important;
     left: 8px !important;
-    top: 12px !important;
-    z-index: 2 !important;
+    top: 4px !important;
+    transform: none !important;
+    z-index: 10 !important;
   }
-  /* The Files action sits at the FAR RIGHT of the header so it reads as a
-     distinct control from the directory toggle on the left (which opens
-     the history sidebar). */
+  /* The Files action sits at the FAR RIGHT of the header */
   [data-mobile-nav="files"] {
     position: absolute !important;
     left: auto !important;
     right: 8px !important;
-    top: 12px !important;
-    z-index: 2 !important;
+    top: 4px !important;
+    transform: none !important;
+    z-index: 10 !important;
   }
   /* Session log download: gone from the header row on mobile (the utilities
      seat holds only the session-log-export capsule). */
