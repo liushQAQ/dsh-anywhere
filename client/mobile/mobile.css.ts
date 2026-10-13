@@ -337,6 +337,41 @@ export const MOBILE_CSS = `
   overflow: hidden !important;
 }
 
+/* 彻底解决移动端右侧状态栏/工具栏打不开的问题（脱离 0 轨网格，全屏抽屉平滑展开） */
+@media (max-width: 1023px) {
+  .CZPbNW_rightbarCol,
+  [class*="rightbarCol"] {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    z-index: 10040 !important;
+    background: var(--dsw-alias-bg-base, #18181b) !important;
+    box-sizing: border-box !important;
+    transition: transform 0.24s var(--ds-ease-in-out, ease-in-out) !important;
+  }
+  /* 未打开状态下推出屏幕右侧 */
+  .CZPbNW_rightbarCol:not(:has([data-sidebar-right-open="true"])),
+  [class*="rightbarCol"]:not(:has([data-sidebar-right-open="true"])) {
+    transform: translateX(110%) !important;
+    pointer-events: none !important;
+  }
+  /* 打开状态下平滑拉回全屏呈现 */
+  .CZPbNW_rightbarCol:has([data-sidebar-right-open="true"]),
+  [class*="rightbarCol"]:has([data-sidebar-right-open="true"]) {
+    transform: none !important;
+    pointer-events: auto !important;
+  }
+  .dMHGga_panel {
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+}
+
 /* 侧栏收起时彻底隐藏抽屉内部残留的切换按钮，杜绝屏幕左边缘天上露出半个多余小按钮 */
 [data-sidebar-collapsed] [class*="WYye1W_toggle"],
 [data-sidebar-collapsed] button[aria-label="打开侧边栏"] {
