@@ -85,7 +85,7 @@ export const MOBILE_CSS = `
 /* Floating fallback button: 规范为与会话页目录按钮完全一致的扁平透明质感，并根据真实状态栏高度精准避让（避免骑在灵动岛上） */
 [data-mobile-nav="fab"] {
   position: absolute !important;
-  top: calc(var(--dsh-statusbar, 54px) + 8px) !important;
+  top: calc(var(--dsh-statusbar, 54px) - 24px) !important;
   left: 12px !important;
   z-index: 21 !important;
   display: inline-flex !important;
@@ -107,6 +107,59 @@ export const MOBILE_CSS = `
 }
 [data-phase="active"] [data-mobile-nav="fab"] {
   display: none !important;
+}
+
+/* 全局模态弹窗、确认框、AI问答/选择题卡片、下拉菜单全局安全规范：
+   1. 严格避让状态栏与灵动岛（top >= var(--dsh-statusbar, 54px) + 8px）；
+   2. 严格避让底部安全区（bottom >= env(safe-area-inset-bottom, 16px) + 8px）；
+   3. 限制最大高度（最大不超过 calc(100vh - var(--dsh-statusbar, 54px) - 80px)），内部强制开启平滑惯性滚动，绝不顶出状态栏、绝不超出底栏！ */
+[class*="NwyCaq_card"],
+.NwyCaq_card,
+[class*="QuestionComposer_card"],
+[data-choice-dialog],
+[class*="questionDialog"],
+[class*="questionCard"],
+[class*="choiceDialog"],
+[class*="choicePanel"],
+[class*="optionsPanel"],
+[class*="choiceContainer"],
+[class*="PlanReviewPanel_card"] {
+  max-height: calc(100vh - var(--dsh-statusbar, 54px) - 80px) !important;
+  max-height: calc(100dvh - var(--dsh-statusbar, 54px) - 80px) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+[class*="NwyCaq_body"],
+.NwyCaq_body,
+[class*="NwyCaq_options"],
+.NwyCaq_options,
+[class*="questionBody"],
+[class*="choiceBody"] {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior: contain !important;
+  padding-bottom: max(16px, env(safe-area-inset-bottom)) !important;
+  box-sizing: border-box !important;
+}
+
+/* 浮动菜单与弹出层（@ / / / + / 模型选择 / 更多操作等）：同样绝不冲破状态栏与底栏 */
+.bqwvaa_menu,
+[data-trigger-menu],
+[data-portal-menu],
+.p2h2LG_card,
+.ZKHwIG_dialog,
+[role="dialog"]:not(.ZiQlkq_panel) {
+  max-height: calc(100vh - var(--dsh-statusbar, 54px) - 80px) !important;
+  max-height: calc(100dvh - var(--dsh-statusbar, 54px) - 80px) !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior: contain !important;
+  box-sizing: border-box !important;
 }
 
 /* 侧栏收起时彻底隐藏抽屉内部残留的切换按钮，杜绝屏幕左边缘天上露出半个多余小按钮 */

@@ -638,7 +638,7 @@ var MOBILE_CSS = `
 /* Floating fallback button: \u89C4\u8303\u4E3A\u4E0E\u4F1A\u8BDD\u9875\u76EE\u5F55\u6309\u94AE\u5B8C\u5168\u4E00\u81F4\u7684\u6241\u5E73\u900F\u660E\u8D28\u611F\uFF0C\u5E76\u6839\u636E\u771F\u5B9E\u72B6\u6001\u680F\u9AD8\u5EA6\u7CBE\u51C6\u907F\u8BA9\uFF08\u907F\u514D\u9A91\u5728\u7075\u52A8\u5C9B\u4E0A\uFF09 */
 [data-mobile-nav="fab"] {
   position: absolute !important;
-  top: calc(var(--dsh-statusbar, 54px) + 8px) !important;
+  top: calc(var(--dsh-statusbar, 54px) - 24px) !important;
   left: 12px !important;
   z-index: 21 !important;
   display: inline-flex !important;
@@ -660,6 +660,59 @@ var MOBILE_CSS = `
 }
 [data-phase="active"] [data-mobile-nav="fab"] {
   display: none !important;
+}
+
+/* \u5168\u5C40\u6A21\u6001\u5F39\u7A97\u3001\u786E\u8BA4\u6846\u3001AI\u95EE\u7B54/\u9009\u62E9\u9898\u5361\u7247\u3001\u4E0B\u62C9\u83DC\u5355\u5168\u5C40\u5B89\u5168\u89C4\u8303\uFF1A
+   1. \u4E25\u683C\u907F\u8BA9\u72B6\u6001\u680F\u4E0E\u7075\u52A8\u5C9B\uFF08top >= var(--dsh-statusbar, 54px) + 8px\uFF09\uFF1B
+   2. \u4E25\u683C\u907F\u8BA9\u5E95\u90E8\u5B89\u5168\u533A\uFF08bottom >= env(safe-area-inset-bottom, 16px) + 8px\uFF09\uFF1B
+   3. \u9650\u5236\u6700\u5927\u9AD8\u5EA6\uFF08\u6700\u5927\u4E0D\u8D85\u8FC7 calc(100vh - var(--dsh-statusbar, 54px) - 80px)\uFF09\uFF0C\u5185\u90E8\u5F3A\u5236\u5F00\u542F\u5E73\u6ED1\u60EF\u6027\u6EDA\u52A8\uFF0C\u7EDD\u4E0D\u9876\u51FA\u72B6\u6001\u680F\u3001\u7EDD\u4E0D\u8D85\u51FA\u5E95\u680F\uFF01 */
+[class*="NwyCaq_card"],
+.NwyCaq_card,
+[class*="QuestionComposer_card"],
+[data-choice-dialog],
+[class*="questionDialog"],
+[class*="questionCard"],
+[class*="choiceDialog"],
+[class*="choicePanel"],
+[class*="optionsPanel"],
+[class*="choiceContainer"],
+[class*="PlanReviewPanel_card"] {
+  max-height: calc(100vh - var(--dsh-statusbar, 54px) - 80px) !important;
+  max-height: calc(100dvh - var(--dsh-statusbar, 54px) - 80px) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+[class*="NwyCaq_body"],
+.NwyCaq_body,
+[class*="NwyCaq_options"],
+.NwyCaq_options,
+[class*="questionBody"],
+[class*="choiceBody"] {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior: contain !important;
+  padding-bottom: max(16px, env(safe-area-inset-bottom)) !important;
+  box-sizing: border-box !important;
+}
+
+/* \u6D6E\u52A8\u83DC\u5355\u4E0E\u5F39\u51FA\u5C42\uFF08@ / / / + / \u6A21\u578B\u9009\u62E9 / \u66F4\u591A\u64CD\u4F5C\u7B49\uFF09\uFF1A\u540C\u6837\u7EDD\u4E0D\u51B2\u7834\u72B6\u6001\u680F\u4E0E\u5E95\u680F */
+.bqwvaa_menu,
+[data-trigger-menu],
+[data-portal-menu],
+.p2h2LG_card,
+.ZKHwIG_dialog,
+[role="dialog"]:not(.ZiQlkq_panel) {
+  max-height: calc(100vh - var(--dsh-statusbar, 54px) - 80px) !important;
+  max-height: calc(100dvh - var(--dsh-statusbar, 54px) - 80px) !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior: contain !important;
+  box-sizing: border-box !important;
 }
 
 /* \u4FA7\u680F\u6536\u8D77\u65F6\u5F7B\u5E95\u9690\u85CF\u62BD\u5C49\u5185\u90E8\u6B8B\u7559\u7684\u5207\u6362\u6309\u94AE\uFF0C\u675C\u7EDD\u5C4F\u5E55\u5DE6\u8FB9\u7F18\u5929\u4E0A\u9732\u51FA\u534A\u4E2A\u591A\u4F59\u5C0F\u6309\u94AE */
