@@ -162,6 +162,156 @@ export const MOBILE_CSS = `
   box-sizing: border-box !important;
 }
 
+/* ==========================================================================
+   暗黑模式按钮与交互控件对比度强化（老总铁律：杜绝灰白底+白字看不清）
+   ========================================================================== */
+@media (prefers-color-scheme: dark) {
+  /* 1. AI 问答/多选题选项按钮未选中态：深色纯净底色 + 浅边框，文字纯白清晰 */
+  .NwyCaq_option,
+  [class*="NwyCaq_option"] {
+    background: #1c1c1e !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    color: #f2f2f7 !important;
+  }
+  .NwyCaq_option .NwyCaq_number,
+  [class*="NwyCaq_option"] [class*="NwyCaq_number"] {
+    background: #2c2c2e !important;
+    color: #e5e5ea !important;
+  }
+  .NwyCaq_option .NwyCaq_optionLabel,
+  [class*="NwyCaq_option"] [class*="NwyCaq_optionLabel"] {
+    color: #ffffff !important;
+    font-weight: 500 !important;
+  }
+  .NwyCaq_option .NwyCaq_description,
+  [class*="NwyCaq_option"] [class*="NwyCaq_description"] {
+    color: #a1a1a6 !important;
+  }
+
+  /* 2. 选中态：高亮品牌蓝背景 + 纯白文字 + 蓝发光边框，层级鲜明分明 */
+  .NwyCaq_optionSelected,
+  [class*="NwyCaq_optionSelected"],
+  .NwyCaq_option:hover:not(:disabled) {
+    background: #0a84ff !important;
+    border-color: #0a84ff !important;
+    color: #ffffff !important;
+  }
+  .NwyCaq_optionSelected .NwyCaq_number,
+  [class*="NwyCaq_optionSelected"] [class*="NwyCaq_number"] {
+    background: rgba(255, 255, 255, 0.25) !important;
+    color: #ffffff !important;
+  }
+  .NwyCaq_optionSelected .NwyCaq_optionLabel,
+  [class*="NwyCaq_optionSelected"] [class*="NwyCaq_optionLabel"],
+  .NwyCaq_optionSelected .NwyCaq_description,
+  [class*="NwyCaq_optionSelected"] [class*="NwyCaq_description"] {
+    color: #ffffff !important;
+  }
+
+  /* 3. 自定义输入框（输入你的答案）在暗黑模式下深色纯净底色 + 浅色虚线边框 */
+  .NwyCaq_customRow,
+  [class*="NwyCaq_customRow"],
+  [class*="NwyCaq_customBlock"] {
+    background: #1c1c1e !important;
+    border: 1px dashed rgba(255, 255, 255, 0.25) !important;
+  }
+  .NwyCaq_customRow input,
+  [class*="NwyCaq_customRow"] input,
+  .NwyCaq_fieldInput,
+  [class*="NwyCaq_fieldInput"] {
+    color: #ffffff !important;
+    background: transparent !important;
+  }
+
+  /* 4. 侧栏底部【导出会话日志】按钮暗黑模式对比度强化：深灰底 + 白字 */
+  [data-mobile-nav="session-log"],
+  button[data-mobile-nav="session-log"] {
+    background: #242426 !important;
+    color: #e5e5ea !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  }
+  [data-mobile-nav="session-log"]:hover {
+    background: #2c2c2e !important;
+    color: #ffffff !important;
+  }
+
+  /* 5. 计划审核弹窗/对话确认/全局普通操作按钮对比度保护 */
+  button.NwyCaq_waitButton,
+  [class*="NwyCaq_waitButton"],
+  .PlanReviewPanel_card button,
+  [class*="PlanReviewPanel_card"] button {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+  }
+}
+
+/* 侧栏抽屉三段式布局（老总铁律）：
+   1. 顶部顶栏（图片 + deepseek HARNESS 字样 + 新会话 + 插件列表）固定内容；
+   2. 底部（余额/今日/柱状图/导出日志 + 齿轮【设置】按钮）固定吸底；
+   3. 中间会话列表内容区（regionArea）根据滑块纵向滚动！ */
+[class*="sidebarCol"],
+.CZPbNW_sidebarCol {
+  padding-top: calc(var(--dsh-statusbar, 54px) + 6px) !important;
+  padding-bottom: max(16px, env(safe-area-inset-bottom)) !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  max-height: 100vh !important;
+  max-height: 100dvh !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+[class*="WYye1W_root"],
+.WYye1W_root {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+[class*="WYye1W_logoRow"],
+.WYye1W_logoRow {
+  flex: none !important;
+  margin: 0 !important;
+  padding: 0 10px 10px 10px !important;
+  position: static !important;
+}
+
+[class*="WYye1W_newSession"],
+.WYye1W_newSession {
+  flex: none !important;
+  margin-bottom: 6px !important;
+}
+
+[class*="WYye1W_panelList"],
+.WYye1W_panelList {
+  flex: none !important;
+}
+
+/* 中间会话列表内容区：独立纵向惯性滑动 */
+[class*="WYye1W_regionArea"],
+.WYye1W_regionArea {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior: contain !important;
+}
+
+/* 底部操作区与设置：固定吸底，绝不溢出屏幕外 */
+[class*="WYye1W_footArea"],
+.WYye1W_footArea {
+  flex: none !important;
+  margin: 0 !important;
+  padding: 10px 10px 0 10px !important;
+  border-top: 1px solid var(--dsw-alias-border-l1, rgba(0,0,0,0.08)) !important;
+  position: static !important;
+  background: inherit !important;
+}
+
 /* 侧栏收起时彻底隐藏抽屉内部残留的切换按钮，杜绝屏幕左边缘天上露出半个多余小按钮 */
 [data-sidebar-collapsed] [class*="WYye1W_toggle"],
 [data-sidebar-collapsed] button[aria-label="打开侧边栏"] {
@@ -282,15 +432,15 @@ export const MOBILE_CSS = `
     transform: translateX(-110%);
     transition: transform .28s var(--ds-ease-in-out, ease-in-out);
     background: var(--dsw-alias-bg-base, #ffffff);
-    /* Keep the drawer's own content below the status bar / notch: the drawer
-       spans the full frame height (its absolute containing block is the
-       frame's padding box, so the frame's own safe-area padding does NOT
-       reach it). The drawer background paints the status-bar strip, which
-       the client's theme-color meta matches, so the strip reads seamless. */
-    padding-top: env(safe-area-inset-top, 0px) !important;
-    /* Kill the official sidebarCol right border: with the backdrop the edge
-       reads cleanly, and the settings dialog (width:100% of this box) stays
-       pixel-flush with the drawer. */
+    /* 严格避开 iOS 顶部状态栏与灵动岛，底部避开物理底条，整个抽屉高度锁死在 100vh */
+    padding-top: calc(var(--dsh-statusbar, 54px) + 6px) !important;
+    padding-bottom: max(16px, env(safe-area-inset-bottom)) !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    max-height: 100vh !important;
+    max-height: 100dvh !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
     border-right: none !important;
   }
 

@@ -715,6 +715,156 @@ var MOBILE_CSS = `
   box-sizing: border-box !important;
 }
 
+/* ==========================================================================
+   \u6697\u9ED1\u6A21\u5F0F\u6309\u94AE\u4E0E\u4EA4\u4E92\u63A7\u4EF6\u5BF9\u6BD4\u5EA6\u5F3A\u5316\uFF08\u8001\u603B\u94C1\u5F8B\uFF1A\u675C\u7EDD\u7070\u767D\u5E95+\u767D\u5B57\u770B\u4E0D\u6E05\uFF09
+   ========================================================================== */
+@media (prefers-color-scheme: dark) {
+  /* 1. AI \u95EE\u7B54/\u591A\u9009\u9898\u9009\u9879\u6309\u94AE\u672A\u9009\u4E2D\u6001\uFF1A\u6DF1\u8272\u7EAF\u51C0\u5E95\u8272 + \u6D45\u8FB9\u6846\uFF0C\u6587\u5B57\u7EAF\u767D\u6E05\u6670 */
+  .NwyCaq_option,
+  [class*="NwyCaq_option"] {
+    background: #1c1c1e !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    color: #f2f2f7 !important;
+  }
+  .NwyCaq_option .NwyCaq_number,
+  [class*="NwyCaq_option"] [class*="NwyCaq_number"] {
+    background: #2c2c2e !important;
+    color: #e5e5ea !important;
+  }
+  .NwyCaq_option .NwyCaq_optionLabel,
+  [class*="NwyCaq_option"] [class*="NwyCaq_optionLabel"] {
+    color: #ffffff !important;
+    font-weight: 500 !important;
+  }
+  .NwyCaq_option .NwyCaq_description,
+  [class*="NwyCaq_option"] [class*="NwyCaq_description"] {
+    color: #a1a1a6 !important;
+  }
+
+  /* 2. \u9009\u4E2D\u6001\uFF1A\u9AD8\u4EAE\u54C1\u724C\u84DD\u80CC\u666F + \u7EAF\u767D\u6587\u5B57 + \u84DD\u53D1\u5149\u8FB9\u6846\uFF0C\u5C42\u7EA7\u9C9C\u660E\u5206\u660E */
+  .NwyCaq_optionSelected,
+  [class*="NwyCaq_optionSelected"],
+  .NwyCaq_option:hover:not(:disabled) {
+    background: #0a84ff !important;
+    border-color: #0a84ff !important;
+    color: #ffffff !important;
+  }
+  .NwyCaq_optionSelected .NwyCaq_number,
+  [class*="NwyCaq_optionSelected"] [class*="NwyCaq_number"] {
+    background: rgba(255, 255, 255, 0.25) !important;
+    color: #ffffff !important;
+  }
+  .NwyCaq_optionSelected .NwyCaq_optionLabel,
+  [class*="NwyCaq_optionSelected"] [class*="NwyCaq_optionLabel"],
+  .NwyCaq_optionSelected .NwyCaq_description,
+  [class*="NwyCaq_optionSelected"] [class*="NwyCaq_description"] {
+    color: #ffffff !important;
+  }
+
+  /* 3. \u81EA\u5B9A\u4E49\u8F93\u5165\u6846\uFF08\u8F93\u5165\u4F60\u7684\u7B54\u6848\uFF09\u5728\u6697\u9ED1\u6A21\u5F0F\u4E0B\u6DF1\u8272\u7EAF\u51C0\u5E95\u8272 + \u6D45\u8272\u865A\u7EBF\u8FB9\u6846 */
+  .NwyCaq_customRow,
+  [class*="NwyCaq_customRow"],
+  [class*="NwyCaq_customBlock"] {
+    background: #1c1c1e !important;
+    border: 1px dashed rgba(255, 255, 255, 0.25) !important;
+  }
+  .NwyCaq_customRow input,
+  [class*="NwyCaq_customRow"] input,
+  .NwyCaq_fieldInput,
+  [class*="NwyCaq_fieldInput"] {
+    color: #ffffff !important;
+    background: transparent !important;
+  }
+
+  /* 4. \u4FA7\u680F\u5E95\u90E8\u3010\u5BFC\u51FA\u4F1A\u8BDD\u65E5\u5FD7\u3011\u6309\u94AE\u6697\u9ED1\u6A21\u5F0F\u5BF9\u6BD4\u5EA6\u5F3A\u5316\uFF1A\u6DF1\u7070\u5E95 + \u767D\u5B57 */
+  [data-mobile-nav="session-log"],
+  button[data-mobile-nav="session-log"] {
+    background: #242426 !important;
+    color: #e5e5ea !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  }
+  [data-mobile-nav="session-log"]:hover {
+    background: #2c2c2e !important;
+    color: #ffffff !important;
+  }
+
+  /* 5. \u8BA1\u5212\u5BA1\u6838\u5F39\u7A97/\u5BF9\u8BDD\u786E\u8BA4/\u5168\u5C40\u666E\u901A\u64CD\u4F5C\u6309\u94AE\u5BF9\u6BD4\u5EA6\u4FDD\u62A4 */
+  button.NwyCaq_waitButton,
+  [class*="NwyCaq_waitButton"],
+  .PlanReviewPanel_card button,
+  [class*="PlanReviewPanel_card"] button {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+  }
+}
+
+/* \u4FA7\u680F\u62BD\u5C49\u4E09\u6BB5\u5F0F\u5E03\u5C40\uFF08\u8001\u603B\u94C1\u5F8B\uFF09\uFF1A
+   1. \u9876\u90E8\u9876\u680F\uFF08\u56FE\u7247 + deepseek HARNESS \u5B57\u6837 + \u65B0\u4F1A\u8BDD + \u63D2\u4EF6\u5217\u8868\uFF09\u56FA\u5B9A\u5185\u5BB9\uFF1B
+   2. \u5E95\u90E8\uFF08\u4F59\u989D/\u4ECA\u65E5/\u67F1\u72B6\u56FE/\u5BFC\u51FA\u65E5\u5FD7 + \u9F7F\u8F6E\u3010\u8BBE\u7F6E\u3011\u6309\u94AE\uFF09\u56FA\u5B9A\u5438\u5E95\uFF1B
+   3. \u4E2D\u95F4\u4F1A\u8BDD\u5217\u8868\u5185\u5BB9\u533A\uFF08regionArea\uFF09\u6839\u636E\u6ED1\u5757\u7EB5\u5411\u6EDA\u52A8\uFF01 */
+[class*="sidebarCol"],
+.CZPbNW_sidebarCol {
+  padding-top: calc(var(--dsh-statusbar, 54px) + 6px) !important;
+  padding-bottom: max(16px, env(safe-area-inset-bottom)) !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  max-height: 100vh !important;
+  max-height: 100dvh !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+[class*="WYye1W_root"],
+.WYye1W_root {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+[class*="WYye1W_logoRow"],
+.WYye1W_logoRow {
+  flex: none !important;
+  margin: 0 !important;
+  padding: 0 10px 10px 10px !important;
+  position: static !important;
+}
+
+[class*="WYye1W_newSession"],
+.WYye1W_newSession {
+  flex: none !important;
+  margin-bottom: 6px !important;
+}
+
+[class*="WYye1W_panelList"],
+.WYye1W_panelList {
+  flex: none !important;
+}
+
+/* \u4E2D\u95F4\u4F1A\u8BDD\u5217\u8868\u5185\u5BB9\u533A\uFF1A\u72EC\u7ACB\u7EB5\u5411\u60EF\u6027\u6ED1\u52A8 */
+[class*="WYye1W_regionArea"],
+.WYye1W_regionArea {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior: contain !important;
+}
+
+/* \u5E95\u90E8\u64CD\u4F5C\u533A\u4E0E\u8BBE\u7F6E\uFF1A\u56FA\u5B9A\u5438\u5E95\uFF0C\u7EDD\u4E0D\u6EA2\u51FA\u5C4F\u5E55\u5916 */
+[class*="WYye1W_footArea"],
+.WYye1W_footArea {
+  flex: none !important;
+  margin: 0 !important;
+  padding: 10px 10px 0 10px !important;
+  border-top: 1px solid var(--dsw-alias-border-l1, rgba(0,0,0,0.08)) !important;
+  position: static !important;
+  background: inherit !important;
+}
+
 /* \u4FA7\u680F\u6536\u8D77\u65F6\u5F7B\u5E95\u9690\u85CF\u62BD\u5C49\u5185\u90E8\u6B8B\u7559\u7684\u5207\u6362\u6309\u94AE\uFF0C\u675C\u7EDD\u5C4F\u5E55\u5DE6\u8FB9\u7F18\u5929\u4E0A\u9732\u51FA\u534A\u4E2A\u591A\u4F59\u5C0F\u6309\u94AE */
 [data-sidebar-collapsed] [class*="WYye1W_toggle"],
 [data-sidebar-collapsed] button[aria-label="\u6253\u5F00\u4FA7\u8FB9\u680F"] {
@@ -835,15 +985,15 @@ var MOBILE_CSS = `
     transform: translateX(-110%);
     transition: transform .28s var(--ds-ease-in-out, ease-in-out);
     background: var(--dsw-alias-bg-base, #ffffff);
-    /* Keep the drawer's own content below the status bar / notch: the drawer
-       spans the full frame height (its absolute containing block is the
-       frame's padding box, so the frame's own safe-area padding does NOT
-       reach it). The drawer background paints the status-bar strip, which
-       the client's theme-color meta matches, so the strip reads seamless. */
-    padding-top: env(safe-area-inset-top, 0px) !important;
-    /* Kill the official sidebarCol right border: with the backdrop the edge
-       reads cleanly, and the settings dialog (width:100% of this box) stays
-       pixel-flush with the drawer. */
+    /* \u4E25\u683C\u907F\u5F00 iOS \u9876\u90E8\u72B6\u6001\u680F\u4E0E\u7075\u52A8\u5C9B\uFF0C\u5E95\u90E8\u907F\u5F00\u7269\u7406\u5E95\u6761\uFF0C\u6574\u4E2A\u62BD\u5C49\u9AD8\u5EA6\u9501\u6B7B\u5728 100vh */
+    padding-top: calc(var(--dsh-statusbar, 54px) + 6px) !important;
+    padding-bottom: max(16px, env(safe-area-inset-bottom)) !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    max-height: 100vh !important;
+    max-height: 100dvh !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
     border-right: none !important;
   }
 
