@@ -2121,43 +2121,6 @@ function mobileApply(ctx) {
   ctx.effect(() => {
     if (!narrow.matches) return () => {
     };
-    const sync = () => {
-      const col = document.querySelector(".CZPbNW_rightbarCol") || document.querySelector('[class*="rightbarCol"]');
-      const panel = document.querySelector(".dMHGga_panel") || document.querySelector("[data-sidebar-right-panel]");
-      if (!col) return;
-      const isOpen = panel !== null && panel.getAttribute("data-sidebar-right-open") === "true" && panel.getAttribute("aria-hidden") !== "true";
-      if (isOpen) {
-        col.setAttribute("data-sidebar-expanded", "true");
-        document.body.setAttribute("data-sidebar-right-visible", "true");
-      } else {
-        col.setAttribute("data-sidebar-expanded", "false");
-        document.body.removeAttribute("data-sidebar-right-visible");
-      }
-    };
-    sync();
-    const observer = new MutationObserver(sync);
-    observer.observe(document.body, { attributes: true, subtree: true, attributeFilter: ["data-sidebar-right-open", "aria-hidden", "class"] });
-    const onDocClick = (e) => {
-      const target = e.target;
-      if (!target) return;
-      if (target.closest('header button[aria-label*="\u53F3\u4FA7\u8FB9\u680F"]') || target.closest("[data-sidebar-right-toggle]")) {
-        setTimeout(sync, 20);
-        setTimeout(sync, 150);
-      }
-      if (target.closest('button[aria-label*="\u6536\u8D77\u53F3\u4FA7\u8FB9\u680F"]') || target.closest('button[aria-label*="\u5173\u95ED"]')) {
-        setTimeout(sync, 20);
-        setTimeout(sync, 150);
-      }
-    };
-    document.addEventListener("click", onDocClick, true);
-    return () => {
-      observer.disconnect();
-      document.removeEventListener("click", onDocClick, true);
-    };
-  }, "dsh-mobile-nav: rightbar drawer sync");
-  ctx.effect(() => {
-    if (!narrow.matches) return () => {
-    };
     const getWorkspaceCwd = () => {
       try {
         const ws = ctx.get?.("workspaces") ?? ctx.workspaces;

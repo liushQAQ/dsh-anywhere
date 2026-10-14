@@ -260,44 +260,6 @@ export function mobileApply(ctx): void {
     }
   }, 'dsh-mobile-nav: sheet rise animation replay')
 
-  // 彻底解决移动端右侧边栏（工作区、文件、终端、浏览器、Diff等）打不开的问题
-  ctx.effect(() => {
-    if (!narrow.matches) return () => {}
-    const sync = () => {
-      const col = document.querySelector('.CZPbNW_rightbarCol') || document.querySelector('[class*="rightbarCol"]')
-      const panel = document.querySelector('.dMHGga_panel') || document.querySelector('[data-sidebar-right-panel]')
-      if (!col) return
-      const isOpen = panel !== null && panel.getAttribute('data-sidebar-right-open') === 'true' && panel.getAttribute('aria-hidden') !== 'true'
-      if (isOpen) {
-        col.setAttribute('data-sidebar-expanded', 'true')
-        document.body.setAttribute('data-sidebar-right-visible', 'true')
-      } else {
-        col.setAttribute('data-sidebar-expanded', 'false')
-        document.body.removeAttribute('data-sidebar-right-visible')
-      }
-    }
-    sync()
-    const observer = new MutationObserver(sync)
-    observer.observe(document.body, { attributes: true, subtree: true, attributeFilter: ['data-sidebar-right-open', 'aria-hidden', 'class'] })
-    const onDocClick = (e: MouseEvent) => {
-      const target = e.target as HTMLElement | null
-      if (!target) return
-      if (target.closest('header button[aria-label*="右侧边栏"]') || target.closest('[data-sidebar-right-toggle]')) {
-        setTimeout(sync, 20)
-        setTimeout(sync, 150)
-      }
-      if (target.closest('button[aria-label*="收起右侧边栏"]') || target.closest('button[aria-label*="关闭"]')) {
-        setTimeout(sync, 20)
-        setTimeout(sync, 150)
-      }
-    }
-    document.addEventListener('click', onDocClick, true)
-    return () => {
-      observer.disconnect()
-      document.removeEventListener('click', onDocClick, true)
-    }
-  }, 'dsh-mobile-nav: rightbar drawer sync')
-
   // 移动端文件守卫（issue #17 修正）：手机上点 dsh-web 渲染的文件链接会触发桌面
   // 端 workspaces.openPath(open ...) —— 既打不开（路径在电脑上），又会抛
   // "path open failed"。这里在捕获阶段拦截这类点击 / 键盘激活，改为弹一个提示，
