@@ -1,6 +1,6 @@
 {
   "name": "dsh-anywhere",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "专为 DSH iOS App 与多终端协同打造：多设备同时在线无缝切换、实时同屏收发、锁屏秒级自愈（Fast-Resume），统一以 3083 端口作为唯一主控与三层通用稳定外网通道。",
   "type": "module",
   "main": "lib/index.js",
