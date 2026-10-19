@@ -12,7 +12,6 @@
     "./package.json": "./package.json"
   },
   "files": [
-    "bin",
     "lib",
     "client",
     "cordis.patch.yml",
