@@ -89,16 +89,53 @@ DSH 移动端抽屉里原本没有任何设置项 —— 真正的设置藏在�
 
 ## 📦 安装与配置
 
+### ⚠️ 先看这条：不要用 `npm i dsh-anywhere`
+
+**npm 上那个 `dsh-anywhere` 不是这个插件。**
+
+```text
+npm registry  : dsh-anywhere@0.1.2
+maintainer    : tangwenhao
+repository    : github.com/tangwenhao616-netizen/dsh-anywhere
+published     : 2026-08-18
+```
+
+它和本项目 **同名但毫无关系**——这个名字在 2026-08 就被别人占了，
+所以本插件从未也没有在 npm 上发布过。`pnpm add dsh-anywhere` / `npm i dsh-anywhere`
+装到的是**别人的代码**，不是这里的功能（没有 iOS 16.3 白屏自愈、没有抽屉设置齿轮）。
+
+**正确装法只有一种：走 GitHub 源。**
+
 ### 1. 安装插件
 在你的 DSH Profile 目录（如 `~/.dsh/profiles/desktop`）下执行：
+
 ```bash
-pnpm add dsh-anywhere
-# 或直接引用本地包:
-pnpm add E:/path/to/dsh-anywhere-1.0.0.tgz
+# pnpm
+pnpm add github:liushQAQ/dsh-anywhere
+
+# 或 npm
+npm i github:liushQAQ/dsh-anywhere
+```
+
+> 走 GitHub 源的好处：
+> - **不需要 npm 账号、不需要发包**，绕开名字被占和注册限制；
+> - **永远拿最新代码**，仓库一提交就生效，不用等发版；
+> - 官方推荐的就是这个地址。
+
+如果你之前误装过 npm 上那个同名包，先清掉再装：
+
+```bash
+pnpm remove dsh-anywhere
+pnpm add github:liushQAQ/dsh-anywhere
+```
+
+也可以直接引用本地构建产物：
+```bash
+pnpm add E:/path/to/dsh-anywhere-1.0.8.tgz
 ```
 
 ### 2. 启用插件
-在 `settings.yaml` 中配置启用：
+在 `settings.yaml` 中配置启用（键名仍是 `dsh-anywhere`，取自 package.json 的 `name`）：
 ```yaml
 plugins:
   dsh-anywhere:
