@@ -5,17 +5,38 @@ import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
-let esbuild;
-try {
-  esbuild = require('esbuild');
-} catch {
-  // 尝试引用本地已安装的 esbuild 依赖
-  esbuild = require('E:/desktop/所有skill/mimo/2026-09-23/https-github-com-tashfeenahmed-freellmapi-git/freellmapi-main/node_modules/esbuild');
-}
-const { build } = esbuild;
 
 const sourceDir = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(sourceDir, '..');
+
+// esbuild 解析顺序（不写死任何机器路径）：
+//   1) 环境变量 ESBUILD_PATH
+//   2) 常规解析（本包 node_modules / 上层 node_modules）
+//   3) 从当前工作目录向上解析
+function loadEsbuild() {
+  const tried = [];
+  const attempts = [];
+  if (process.env.ESBUILD_PATH) attempts.push(process.env.ESBUILD_PATH);
+  attempts.push('esbuild');
+  for (const spec of attempts) {
+    tried.push(spec);
+    try { return require(spec); } catch {}
+    try { return require(require.resolve(spec, { paths: [packageRoot, process.cwd()] })); } catch {}
+  }
+  throw new Error(
+    `未找到 esbuild（尝试过：${tried.join(', ')}）。请在插件目录执行 \`npm i -D esbuild\`，` +
+    `或用环境变量 ESBUILD_PATH 指向 esbuild 的入口文件。`,
+  );
+}
+
+let esbuild;
+try {
+  esbuild = loadEsbuild();
+} catch (err) {
+  console.error(String(err?.message ?? err));
+  process.exit(1);
+}
+const { build } = esbuild;
 const outputPath = resolve(packageRoot, 'client/client.js');
 const loaderId = process.env.DSH_ANYWHERE_CLIENT_ID ?? 'dsh-anywhere';
 
