@@ -999,10 +999,14 @@ var MOBILE_CSS = `
      clears the status bar / notch for every in-flow surface (session header,
      messages, composer); the absolutely-positioned drawer is unaffected (its
      containing block is the frame's padding box, i.e. still the frame top). */
+  /* v1.0.126: frame padding-top env() removed - it was the sole source of the
+     +59pt top gap on DSHios real device (pixel-proven: tab underline 172pt vs 113pt).
+     Status-bar clearance is now owned by the App (native __dshNativeStatusBar + JS
+     geometric fix). */
   [data-mobile-nav="frame"] {
     position: relative !important;
     grid-template-columns: minmax(0, 1fr) 0 0 !important;
-    padding-top: env(safe-area-inset-top, 0px) !important;
+    padding-top: 0px !important;
   }
 
   /* \u4E3B\u5185\u5BB9\u5217\uFF08\u7B2C 2 \u4E2A\u7F51\u683C\u5B50\u5143\u7D20\uFF09\u5728\u5B98\u65B9\u6837\u5F0F\u91CC\u6709\u663E\u5F0F grid-column: 2\u2014\u2014
