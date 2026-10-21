@@ -174,6 +174,9 @@ plugins:
 
 ### v1.0.9
 
+* **发布规范化**：新增 `LICENSE`（MIT）与 `repository` / `homepage` / `bugs` / `author` 元数据；`files` 白名单补 `LICENSE`。
+* **打包瘦身**：清出 5 个历史 `.bak` 备份（`files` 里的目录项会整目录包含，`.bak` 照样进包），包体积 5.01 MB → 1.09 MB，文件数 32 → 27。
+* **文档通用化**：安装示例的绝对路径改成占位 `/path/to/dsh-anywhere-<version>.tgz`；源码注释与构建产物里的内部措辞改为中性表述，`client/client.js` 已重新构建。
 * 齿轮定位改为**以「账号行右界」与「抽屉右界」中更靠内的那个为基准**（`anchor = min(ar.right, drawerRight)`，再左移 26+8px）。
   起因：App 把抽屉宽度强制压到 252px 后，账号行仍排在 270，旧算法 `ar.right - 30` 让齿轮 right=266 —— 超出抽屉、被 `overflow:hidden` 裁掉右半边。
 * 实测 430×932 / 393×852 / 375×667 三种尺寸，齿轮均完整落在抽屉内（right 230 / 208 / 198，抽屉右界 252 / 230 / 220）。
