@@ -15,7 +15,8 @@
     "lib",
     "client",
     "cordis.patch.yml",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "build:client": "node client/build.mjs"
@@ -34,6 +35,15 @@
     "node": ">=20",
     "dsh": ">=0.1.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liushQAQ/dsh-anywhere.git"
+  },
+  "homepage": "https://github.com/liushQAQ/dsh-anywhere#readme",
+  "bugs": {
+    "url": "https://github.com/liushQAQ/dsh-anywhere/issues"
+  },
+  "author": "liushQAQ",
   "license": "MIT",
   "keywords": [
     "deepseek-harness",
