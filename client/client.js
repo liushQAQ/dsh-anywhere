@@ -28,7 +28,7 @@ var __copyProps = (to, from, except, desc) => {
 };
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-// client/index.jsx
+// ../packages/dsh-anywhere/client/index.jsx
 var index_exports = {};
 __export(index_exports, {
   apply: () => apply,
@@ -39,7 +39,7 @@ __export(index_exports, {
 module.exports = __toCommonJS(index_exports);
 var import_react2 = require("react");
 
-// client/api.js
+// ../packages/dsh-anywhere/client/api.js
 var ANYWHERE_RPC_CHANNEL = "/dsh-anywhere";
 var ANYWHERE_ENDPOINTS = Object.freeze({
   status: "anywhere.status",
@@ -105,7 +105,7 @@ function redactStatus(s) {
   };
 }
 
-// client/mobile/MobileNavToggle.tsx
+// ../packages/dsh-anywhere/client/mobile/MobileNavToggle.tsx
 var import_dsh_client_ui_primitives = require("@deepseek-ai/dsh-client-ui-primitives");
 function MobileNavToggle({ toggleSidebar, t }) {
   const toggleExplorer = () => {
@@ -140,11 +140,11 @@ function MobileNavToggle({ toggleSidebar, t }) {
   ));
 }
 
-// client/mobile/MobileNavOverlay.tsx
+// ../packages/dsh-anywhere/client/mobile/MobileNavOverlay.tsx
 var import_react = require("react");
 var import_dsh_client_ui_primitives2 = require("@deepseek-ai/dsh-client-ui-primitives");
 
-// client/mobile/nav-targets.mjs
+// ../packages/dsh-anywhere/client/mobile/nav-targets.mjs
 var DRAWER_SELECTOR = '[data-mobile-nav="frame"] > :first-child';
 var TOGGLE_SELECTOR = '[data-mobile-nav="toggle"]';
 var NAV_TARGETS = [
@@ -177,7 +177,7 @@ function isOverlayTap(target) {
   return target.closest(OVERLAY_SELECTOR) !== null;
 }
 
-// client/mobile/MobileNavOverlay.tsx
+// ../packages/dsh-anywhere/client/mobile/MobileNavOverlay.tsx
 var MOBILE_QUERY = "(max-width: 1023px)";
 function useMobile() {
   const [mobile, setMobile] = (0, import_react.useState)(() => window.matchMedia(MOBILE_QUERY).matches);
@@ -366,7 +366,7 @@ function MobileNavOverlay({ toggleSidebar, t }) {
   ));
 }
 
-// client/mobile/MobileDrawerFooter.tsx
+// ../packages/dsh-anywhere/client/mobile/MobileDrawerFooter.tsx
 var import_dsh_client_ui_primitives3 = require("@deepseek-ai/dsh-client-ui-primitives");
 function MobileDrawerFooter({ useSessions, downloadSessionLog, toggleSidebar, t }) {
   const sessionId = useSessions((state) => state.current);
@@ -402,7 +402,7 @@ function MobileDrawerFooter({ useSessions, downloadSessionLog, toggleSidebar, t 
   ));
 }
 
-// client/mobile/fileGuard.ts
+// ../packages/dsh-anywhere/client/mobile/fileGuard.ts
 var GUARD_MSG = "\u624B\u673A\u4E0A\u65E0\u6CD5\u76F4\u63A5\u6253\u5F00\u7535\u8111\u4E0A\u7684\u6587\u4EF6";
 var WS_LABELS = ["\u6DFB\u52A0\u5DE5\u4F5C\u533A", "\u6DFB\u52A0\u5DE5\u4F5C\u533A\u2026", "Add workspace", "Add workspace\u2026"];
 var COPY_LABEL = "\u590D\u5236";
@@ -565,7 +565,7 @@ function startFileGuard(readFile) {
   };
 }
 
-// client/mobile/mobile.css.ts
+// ../packages/dsh-anywhere/client/mobile/mobile.css.ts
 var MOBILE_CSS = `
 /* ---------- base control styles (rendered at any width, hidden where unused) ---------- */
 
@@ -1225,6 +1225,24 @@ var MOBILE_CSS = `
     z-index: 130 !important;
     border-radius: 14px !important;
     box-shadow: 0 -4px 28px rgba(0, 0, 0, .18) !important;
+  }
+
+  /* --- Queued-message dock (QueueDock) stacking on mobile ---
+     \u5B98\u65B9 .dock \u662F static \u4E14\u65E0 z-index\uFF1A\u5728 composerStack\uFF08flex column\uFF09\u91CC
+     DOM \u5E8F\u6392\u5728\u8F93\u5165\u5361\u7247\u4E4B\u524D\uFF0C\u6309 CSS \u5C42\u53E0\u89C4\u5219\u4F1A\u88AB seat \u5185\u4EFB\u4F55 positioned
+     \u5144\u5F1F\u76D6\u4F4F\u2014\u2014\u8F93\u5165\u5361\u7247\u7684 absolute \u88C5\u9970\u5C42\uFF08overlayAnchor \u7B49\uFF09\uFF0C\u4EE5\u53CA\u672A
+     sheet \u5316\u7684 [data-trigger-menu] \u5F39\u51FA\u83DC\u5355\uFF08@\u63D0\u53CA/\u6587\u4EF6\u9009\u62E9\u7B49\uFF0C\u672C\u6587\u4EF6\u53EA
+     \u5BF9 model pill \u4E0E\u547D\u4EE4\u9762\u677F\u4E24\u7C7B\u505A\u4E86 fixed sheet \u5316\uFF09\u3002360px \u7A84\u5C4F\u4E0A\u8FD9\u4E9B
+     \u83DC\u5355\u51E0\u4E4E\u5168\u5BBD\uFF0C\u76F4\u63A5\u76D6\u6B7B\u6392\u961F\u6761\uFF1A\u7F16\u8F91/\u5220\u9664/steer \u6309\u94AE\u70B9\u4E0D\u52A8\uFF0C\u89C6\u89C9\u4E0A
+     \u5448\u73B0"\u53E0\u5370/\u4E71\u5C42"\u3002\u8FD9\u91CC\u628A dock \u7EB3\u5165 composer \u81EA\u5DF1\u7684\u5C42\uFF1A
+     relative + z-index:1 \u2192 \u538B\u8FC7\u8F93\u5165\u5361\u7247\u57FA\u7840\u5C42\u4E0E\u88C5\u9970\u5C42\uFF0C\u6392\u961F\u6761\u5B8C\u6574\u53EF\u70B9\u3002
+     \u4E0D\u5F71\u54CD\u4EFB\u4F55\u6D6E\u5C42\uFF1Amodel/\u547D\u4EE4\u9762\u677F\u5DF2 fixed z-130\u3001\u6587\u4EF6 sheets z-55/56\u3001
+     drawer z-1200\u3001backdrop z-1100 \u5747\u5728 seat\uFF08sticky z-7\uFF09\u7684\u5C42\u53E0\u4E0A\u4E0B\u6587
+     \u4E4B\u5916\u6216\u66F4\u9AD8\uFF0C\u4E34\u65F6\u6D6E\u5C42\u76D6\u4F4F\u6392\u961F\u6761\u4ECD\u662F\u65E2\u5B9A mobile UX\uFF0C\u5173\u95ED\u5373\u6062\u590D\u3002
+     \u7A33\u5B9A\u6027\u94A9\u5B50\u7528 DSH \u5B98\u65B9 data-queue-dock \u5C5E\u6027\uFF0C\u4E0D\u4F9D\u8D56 hashed class\u3002 */
+  [data-phase] [data-queue-dock] {
+    position: relative !important;
+    z-index: 1 !important;
   }
 
   /* --- Session header on mobile ---
@@ -1906,7 +1924,7 @@ var MOBILE_CSS = `
 
 `;
 
-// client/mobile/locales.ts
+// ../packages/dsh-anywhere/client/mobile/locales.ts
 var NS = "mobileNav";
 var zh = {
   "open": "\u6253\u5F00\u76EE\u5F55",
@@ -1923,7 +1941,7 @@ var en = {
   "files": "Files"
 };
 
-// client/mobile/layout-mode.mjs
+// ../packages/dsh-anywhere/client/mobile/layout-mode.mjs
 function resolveLayout({ urlValue, stored, narrowMatch }) {
   const url = String(urlValue ?? "").trim();
   if (url === "desktop") return "desktop";
@@ -1947,7 +1965,7 @@ function persistLayoutFromUrl(urlValue) {
   }
 }
 
-// client/mobile/mobile-apply.tsx
+// ../packages/dsh-anywhere/client/mobile/mobile-apply.tsx
 function mobileApply(ctx) {
   const urlValue = new URL(window.location.href).searchParams.get("dsh-layout") ?? "";
   const narrowMQ = window.matchMedia("(max-width: 1023px)");
@@ -2200,7 +2218,7 @@ function mobileApply(ctx) {
   }, MobileDrawerFooter));
 }
 
-// client/anywhere-locales.js
+// ../packages/dsh-anywhere/client/anywhere-locales.js
 var NS2 = "anywhere";
 var zh2 = {
   "section": "\u624B\u673A\u8BBF\u95EE",
@@ -2411,7 +2429,7 @@ var en2 = {
   "feedback": "\u{1F64F} Questions? Open an issue on GitHub"
 };
 
-// client/index.jsx
+// ../packages/dsh-anywhere/client/index.jsx
 var name = "dsh-anywhere";
 var inject = ["slots", "connection", "layout", "locale", "sessionLogDownload"];
 function fmt(t, key, vars) {

@@ -674,6 +674,24 @@ export const MOBILE_CSS = `
     box-shadow: 0 -4px 28px rgba(0, 0, 0, .18) !important;
   }
 
+  /* --- Queued-message dock (QueueDock) stacking on mobile ---
+     官方 .dock 是 static 且无 z-index：在 composerStack（flex column）里
+     DOM 序排在输入卡片之前，按 CSS 层叠规则会被 seat 内任何 positioned
+     兄弟盖住——输入卡片的 absolute 装饰层（overlayAnchor 等），以及未
+     sheet 化的 [data-trigger-menu] 弹出菜单（@提及/文件选择等，本文件只
+     对 model pill 与命令面板两类做了 fixed sheet 化）。360px 窄屏上这些
+     菜单几乎全宽，直接盖死排队条：编辑/删除/steer 按钮点不动，视觉上
+     呈现"叠印/乱层"。这里把 dock 纳入 composer 自己的层：
+     relative + z-index:1 → 压过输入卡片基础层与装饰层，排队条完整可点。
+     不影响任何浮层：model/命令面板已 fixed z-130、文件 sheets z-55/56、
+     drawer z-1200、backdrop z-1100 均在 seat（sticky z-7）的层叠上下文
+     之外或更高，临时浮层盖住排队条仍是既定 mobile UX，关闭即恢复。
+     稳定性钩子用 DSH 官方 data-queue-dock 属性，不依赖 hashed class。 */
+  [data-phase] [data-queue-dock] {
+    position: relative !important;
+    z-index: 1 !important;
+  }
+
   /* --- Session header on mobile ---
      移动端顶栏布局规范（已定版）：
      1. 左侧最左边保留 [打开目录] 按钮（绝对定位钉在左侧）；
