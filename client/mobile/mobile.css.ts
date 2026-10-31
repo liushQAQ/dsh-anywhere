@@ -337,6 +337,23 @@ export const MOBILE_CSS = `
   overflow: hidden !important;
 }
 
+/* 状态栏让位只落地一次（右抽屉"闪一下→位置偏低→上跳一截"修复）：
+   上面两条规则给 rightbarCol 加了 padding-top，而 315 行那条把同样的
+   padding-top 又同时打在它内部的 [data-dockkit-surface]、dMHGga_root、
+   YdIzba_root、sidebar.right 上——嵌套叠加后顶部空出两倍状态栏高度；
+   内层节点（dockkit surface / 面板 root）晚一拍挂载时，这份重复让位才
+   出现，内容随之在展开动画里先偏低、再上跳一段距离。列级保留唯一一次
+   让位，rightbarCol 子树内的内层一律归零；选择器全部限定在
+   rightbarCol 后代，互不相交的层（aionui 预览列等）不受影响。 */
+[class*="rightbarCol"] [data-dockkit-surface],
+[class*="rightbarCol"] [data-dockkit-strip],
+[class*="rightbarCol"] [data-slot="sidebar.right"],
+[class*="rightbarCol"] [class*="dMHGga_root"],
+[class*="rightbarCol"] .dMHGga_session,
+[class*="rightbarCol"] [class*="YdIzba_root"] {
+  padding-top: 0 !important;
+}
+
 /* 彻底解决移动端右侧状态栏/工具栏打不开的问题（脱离 0 轨网格，全屏抽屉平滑展开） */
 @media (max-width: 1023px) {
   .CZPbNW_rightbarCol,
@@ -462,10 +479,13 @@ export const MOBILE_CSS = `
     min-width: 0 !important;
   }
 
-  /* The sidebar column (first grid child) becomes a left drawer. The drawer
-     hugs the sidebar content exactly (the wide sidebar carries an inline
-     width, ~280px): a fixed 92vw box would leave a white strip where the
-     container background shows beside the content.
+  /* The sidebar column (first grid child) becomes a left drawer. Fixed
+     phone-first width instead of content-hugging: the ~280px intrinsic
+     drawer covered ~65% of a 430pt phone, leaving a sliver of the
+     conversation — the chat is the primary module, so the drawer caps at
+     min(232px, 54vw) and the flex-column children (nav rows, session list,
+     footer widget) reflow into the narrower column (rows already ellipsis;
+     no white strip because the drawer paints its own opaque background).
      Closed state: translateX(-110%) — more than -100% of the max-content
      width — guarantees the whole drawer (and its shadow, had it one) leaves
      the viewport. A mere -100% leaves a sliver on screen; -105% (as used
@@ -488,8 +508,8 @@ export const MOBILE_CSS = `
   [data-mobile-nav="frame"] > :first-child {
     position: absolute !important;
     inset: 0 auto 0 0 !important;
-    width: max-content !important;
-    max-width: 92vw !important;
+    width: min(232px, 54vw) !important;
+    max-width: min(232px, 54vw) !important;
     z-index: 1200 !important;
     transform: translateX(-110%);
     transition: transform .28s var(--ds-ease-in-out, ease-in-out);
@@ -642,23 +662,35 @@ export const MOBILE_CSS = `
   }
 
   /* --- Composer popups as bottom sheets on mobile ---
-     Two composer-anchored popups break on phones (field: bottom + side
+     Three composer-anchored popups break on phones (field: bottom + side
      cut, only part of the popup visible):
      1. the model pill menu ([role=menu], max 360px, opens upward from the
         pill inside the composer card);
      2. the "/" command palette (max 320px card with the search box — it
-        hosts the /model popupSelect list: search + provider-grouped rows).
-     Both are position:absolute INSIDE the conversation scrollBody
+        hosts the /model popupSelect list: search + provider-grouped rows);
+     3. the trigger menu ([data-trigger-menu] — the + button / @ / / option
+        list). It anchors above the composer card, so its height on screen
+        depends on the keyboard state at open time (keyboard closed = low,
+        open = high) — the card lands "sometimes above, sometimes below" —
+        and while the keyboard slides the viewport compresses under it, so
+        tall lists overlap the rising keyboard. Snapping it to the same
+        fixed sheet gives one stable position that rides the viewport
+        resize smoothly.
+     All are position:absolute INSIDE the conversation scrollBody
      (overflow:hidden) and the shell center column (overflow:hidden), so
-     the scroll containers clip them mid-list. Forensics showed neither
-     layer creates a containing block (no transform/contain/will-change),
-     so on mobile we snap whichever popup is open to a viewport-anchored
-     sheet: fixed positioning escapes the scroll clip entirely, width is
-     deterministic, safe-area keeps it off the gesture bar. A transient
-     picker covering the composer is standard mobile UX; selection or an
-     outside tap still dismisses it. */
+     the scroll containers clip them mid-list. Forensics showed none of
+     these layers creates a containing block (no transform/contain/
+     will-change), so on mobile we snap whichever popup is open to a
+     viewport-anchored sheet: fixed positioning escapes the scroll clip
+     entirely, width is deterministic, safe-area keeps it off the gesture
+     bar. A transient picker covering the composer is standard mobile UX;
+     selection or an outside tap still dismisses it. The trigger-menu
+     selector deliberately avoids :has() — iOS 15.4–16.3 has no :has()
+     (the proxy rewrites the other two selectors for those devices, this
+     one needs no rewrite at all). */
   [data-phase] [class$="_root"]:has(> [aria-haspopup="menu"]) > [role="menu"],
-  [data-phase] [class$="_card"]:has(> [class$="_search"]) {
+  [data-phase] [class$="_card"]:has(> [class$="_search"]),
+  [data-phase] [data-trigger-menu] {
     position: fixed !important;
     left: 12px !important;
     right: 12px !important;

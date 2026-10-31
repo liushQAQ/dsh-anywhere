@@ -187,6 +187,14 @@ plugins:
 
 ## 🗒 更新日志
 
+### v1.0.11
+
+* **手机端左抽屉「会话」区扩容（老总反馈：会话才是重点模块）**：菜单行 36→28px、隐藏 Ctrl+Alt+N 快捷键提示、隐藏费用卡明细（保留「余额 ¥xx」摘要行）、压薄 logo 行，会话树自动撑到 ~400px。
+* **+ 号弹层钉位与限高（老总反馈：忽上忽下 + 与键盘重叠）**：点 + 先收键盘，弹层统一钉在按钮上方、键盘弹起按 visualViewport 上抬，MutationObserver 兜底重钉；CSS 硬顶所有 `[role="menu"]` 限高 `min(52vh,460px)` + 卡片内滚动——不再依赖 JS 命中，任何门户弹层（含工具卡片）都不会再撑满全屏。
+* **右抽屉顶部安全区（老总反馈：按钮顶进灵动岛）**：`[data-sidebar-right-panel]` 补 `padding-top:max(env(safe-area-inset-top),60px)`，与主栏 60px 约定对齐。
+* **右抽屉防偏移哨兵 rpFix（老总反馈：真机偶发左右偏移出屏）**：桌面全态复现几何正确，属 WKWebView 特有状态，不猜机制——面板打开期间 300ms 实测几何，x/y≠0 或宽度不足即宿主列 `transform:none` + 面板归位，关闭撤内联交还宿主动画；另加 `html,body overflow-x:clip` 根治整页横漂。桌面桩测三场景（列毒写/面板毒写/关闭复原）全过。
+* **会话密钥持久化（老总反馈：3083 每次打开都弹验证）**：登录 cookie 绑定的 sessionKey 由进程级随机改为落盘 `$DSH_HOME/dsh-anywhere/session-key`（0600），重启/更新后不变——手机输一次 PIN 长期免输；仅「恢复出厂设置」轮换踢掉全部设备。
+
 ### v1.0.10
 
 * **攻克 iOS 16.3 及老版本 WebKit 致命白屏（SyntaxError: Unexpected token '{'）**：

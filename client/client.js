@@ -28,7 +28,7 @@ var __copyProps = (to, from, except, desc) => {
 };
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-// ../packages/dsh-anywhere/client/index.jsx
+// client/index.jsx
 var index_exports = {};
 __export(index_exports, {
   apply: () => apply,
@@ -39,7 +39,7 @@ __export(index_exports, {
 module.exports = __toCommonJS(index_exports);
 var import_react2 = require("react");
 
-// ../packages/dsh-anywhere/client/api.js
+// client/api.js
 var ANYWHERE_RPC_CHANNEL = "/dsh-anywhere";
 var ANYWHERE_ENDPOINTS = Object.freeze({
   status: "anywhere.status",
@@ -105,7 +105,7 @@ function redactStatus(s) {
   };
 }
 
-// ../packages/dsh-anywhere/client/mobile/MobileNavToggle.tsx
+// client/mobile/MobileNavToggle.tsx
 var import_dsh_client_ui_primitives = require("@deepseek-ai/dsh-client-ui-primitives");
 function MobileNavToggle({ toggleSidebar, t }) {
   const toggleExplorer = () => {
@@ -140,11 +140,11 @@ function MobileNavToggle({ toggleSidebar, t }) {
   ));
 }
 
-// ../packages/dsh-anywhere/client/mobile/MobileNavOverlay.tsx
+// client/mobile/MobileNavOverlay.tsx
 var import_react = require("react");
 var import_dsh_client_ui_primitives2 = require("@deepseek-ai/dsh-client-ui-primitives");
 
-// ../packages/dsh-anywhere/client/mobile/nav-targets.mjs
+// client/mobile/nav-targets.mjs
 var DRAWER_SELECTOR = '[data-mobile-nav="frame"] > :first-child';
 var TOGGLE_SELECTOR = '[data-mobile-nav="toggle"]';
 var NAV_TARGETS = [
@@ -177,7 +177,7 @@ function isOverlayTap(target) {
   return target.closest(OVERLAY_SELECTOR) !== null;
 }
 
-// ../packages/dsh-anywhere/client/mobile/MobileNavOverlay.tsx
+// client/mobile/MobileNavOverlay.tsx
 var MOBILE_QUERY = "(max-width: 1023px)";
 function useMobile() {
   const [mobile, setMobile] = (0, import_react.useState)(() => window.matchMedia(MOBILE_QUERY).matches);
@@ -366,7 +366,7 @@ function MobileNavOverlay({ toggleSidebar, t }) {
   ));
 }
 
-// ../packages/dsh-anywhere/client/mobile/MobileDrawerFooter.tsx
+// client/mobile/MobileDrawerFooter.tsx
 var import_dsh_client_ui_primitives3 = require("@deepseek-ai/dsh-client-ui-primitives");
 function MobileDrawerFooter({ useSessions, downloadSessionLog, toggleSidebar, t }) {
   const sessionId = useSessions((state) => state.current);
@@ -402,7 +402,7 @@ function MobileDrawerFooter({ useSessions, downloadSessionLog, toggleSidebar, t 
   ));
 }
 
-// ../packages/dsh-anywhere/client/mobile/fileGuard.ts
+// client/mobile/fileGuard.ts
 var GUARD_MSG = "\u624B\u673A\u4E0A\u65E0\u6CD5\u76F4\u63A5\u6253\u5F00\u7535\u8111\u4E0A\u7684\u6587\u4EF6";
 var WS_LABELS = ["\u6DFB\u52A0\u5DE5\u4F5C\u533A", "\u6DFB\u52A0\u5DE5\u4F5C\u533A\u2026", "Add workspace", "Add workspace\u2026"];
 var COPY_LABEL = "\u590D\u5236";
@@ -565,7 +565,7 @@ function startFileGuard(readFile) {
   };
 }
 
-// ../packages/dsh-anywhere/client/mobile/mobile.css.ts
+// client/mobile/mobile.css.ts
 var MOBILE_CSS = `
 /* ---------- base control styles (rendered at any width, hidden where unused) ---------- */
 
@@ -890,6 +890,23 @@ var MOBILE_CSS = `
   overflow: hidden !important;
 }
 
+/* \u72B6\u6001\u680F\u8BA9\u4F4D\u53EA\u843D\u5730\u4E00\u6B21\uFF08\u53F3\u62BD\u5C49"\u95EA\u4E00\u4E0B\u2192\u4F4D\u7F6E\u504F\u4F4E\u2192\u4E0A\u8DF3\u4E00\u622A"\u4FEE\u590D\uFF09\uFF1A
+   \u4E0A\u9762\u4E24\u6761\u89C4\u5219\u7ED9 rightbarCol \u52A0\u4E86 padding-top\uFF0C\u800C 315 \u884C\u90A3\u6761\u628A\u540C\u6837\u7684
+   padding-top \u53C8\u540C\u65F6\u6253\u5728\u5B83\u5185\u90E8\u7684 [data-dockkit-surface]\u3001dMHGga_root\u3001
+   YdIzba_root\u3001sidebar.right \u4E0A\u2014\u2014\u5D4C\u5957\u53E0\u52A0\u540E\u9876\u90E8\u7A7A\u51FA\u4E24\u500D\u72B6\u6001\u680F\u9AD8\u5EA6\uFF1B
+   \u5185\u5C42\u8282\u70B9\uFF08dockkit surface / \u9762\u677F root\uFF09\u665A\u4E00\u62CD\u6302\u8F7D\u65F6\uFF0C\u8FD9\u4EFD\u91CD\u590D\u8BA9\u4F4D\u624D
+   \u51FA\u73B0\uFF0C\u5185\u5BB9\u968F\u4E4B\u5728\u5C55\u5F00\u52A8\u753B\u91CC\u5148\u504F\u4F4E\u3001\u518D\u4E0A\u8DF3\u4E00\u6BB5\u8DDD\u79BB\u3002\u5217\u7EA7\u4FDD\u7559\u552F\u4E00\u4E00\u6B21
+   \u8BA9\u4F4D\uFF0CrightbarCol \u5B50\u6811\u5185\u7684\u5185\u5C42\u4E00\u5F8B\u5F52\u96F6\uFF1B\u9009\u62E9\u5668\u5168\u90E8\u9650\u5B9A\u5728
+   rightbarCol \u540E\u4EE3\uFF0C\u4E92\u4E0D\u76F8\u4EA4\u7684\u5C42\uFF08aionui \u9884\u89C8\u5217\u7B49\uFF09\u4E0D\u53D7\u5F71\u54CD\u3002 */
+[class*="rightbarCol"] [data-dockkit-surface],
+[class*="rightbarCol"] [data-dockkit-strip],
+[class*="rightbarCol"] [data-slot="sidebar.right"],
+[class*="rightbarCol"] [class*="dMHGga_root"],
+[class*="rightbarCol"] .dMHGga_session,
+[class*="rightbarCol"] [class*="YdIzba_root"] {
+  padding-top: 0 !important;
+}
+
 /* \u5F7B\u5E95\u89E3\u51B3\u79FB\u52A8\u7AEF\u53F3\u4FA7\u72B6\u6001\u680F/\u5DE5\u5177\u680F\u6253\u4E0D\u5F00\u7684\u95EE\u9898\uFF08\u8131\u79BB 0 \u8F68\u7F51\u683C\uFF0C\u5168\u5C4F\u62BD\u5C49\u5E73\u6ED1\u5C55\u5F00\uFF09 */
 @media (max-width: 1023px) {
   .CZPbNW_rightbarCol,
@@ -1015,10 +1032,13 @@ var MOBILE_CSS = `
     min-width: 0 !important;
   }
 
-  /* The sidebar column (first grid child) becomes a left drawer. The drawer
-     hugs the sidebar content exactly (the wide sidebar carries an inline
-     width, ~280px): a fixed 92vw box would leave a white strip where the
-     container background shows beside the content.
+  /* The sidebar column (first grid child) becomes a left drawer. Fixed
+     phone-first width instead of content-hugging: the ~280px intrinsic
+     drawer covered ~65% of a 430pt phone, leaving a sliver of the
+     conversation \u2014 the chat is the primary module, so the drawer caps at
+     min(232px, 54vw) and the flex-column children (nav rows, session list,
+     footer widget) reflow into the narrower column (rows already ellipsis;
+     no white strip because the drawer paints its own opaque background).
      Closed state: translateX(-110%) \u2014 more than -100% of the max-content
      width \u2014 guarantees the whole drawer (and its shadow, had it one) leaves
      the viewport. A mere -100% leaves a sliver on screen; -105% (as used
@@ -1041,8 +1061,8 @@ var MOBILE_CSS = `
   [data-mobile-nav="frame"] > :first-child {
     position: absolute !important;
     inset: 0 auto 0 0 !important;
-    width: max-content !important;
-    max-width: 92vw !important;
+    width: min(232px, 54vw) !important;
+    max-width: min(232px, 54vw) !important;
     z-index: 1200 !important;
     transform: translateX(-110%);
     transition: transform .28s var(--ds-ease-in-out, ease-in-out);
@@ -1195,23 +1215,35 @@ var MOBILE_CSS = `
   }
 
   /* --- Composer popups as bottom sheets on mobile ---
-     Two composer-anchored popups break on phones (field: bottom + side
+     Three composer-anchored popups break on phones (field: bottom + side
      cut, only part of the popup visible):
      1. the model pill menu ([role=menu], max 360px, opens upward from the
         pill inside the composer card);
      2. the "/" command palette (max 320px card with the search box \u2014 it
-        hosts the /model popupSelect list: search + provider-grouped rows).
-     Both are position:absolute INSIDE the conversation scrollBody
+        hosts the /model popupSelect list: search + provider-grouped rows);
+     3. the trigger menu ([data-trigger-menu] \u2014 the + button / @ / / option
+        list). It anchors above the composer card, so its height on screen
+        depends on the keyboard state at open time (keyboard closed = low,
+        open = high) \u2014 the card lands "sometimes above, sometimes below" \u2014
+        and while the keyboard slides the viewport compresses under it, so
+        tall lists overlap the rising keyboard. Snapping it to the same
+        fixed sheet gives one stable position that rides the viewport
+        resize smoothly.
+     All are position:absolute INSIDE the conversation scrollBody
      (overflow:hidden) and the shell center column (overflow:hidden), so
-     the scroll containers clip them mid-list. Forensics showed neither
-     layer creates a containing block (no transform/contain/will-change),
-     so on mobile we snap whichever popup is open to a viewport-anchored
-     sheet: fixed positioning escapes the scroll clip entirely, width is
-     deterministic, safe-area keeps it off the gesture bar. A transient
-     picker covering the composer is standard mobile UX; selection or an
-     outside tap still dismisses it. */
+     the scroll containers clip them mid-list. Forensics showed none of
+     these layers creates a containing block (no transform/contain/
+     will-change), so on mobile we snap whichever popup is open to a
+     viewport-anchored sheet: fixed positioning escapes the scroll clip
+     entirely, width is deterministic, safe-area keeps it off the gesture
+     bar. A transient picker covering the composer is standard mobile UX;
+     selection or an outside tap still dismisses it. The trigger-menu
+     selector deliberately avoids :has() \u2014 iOS 15.4\u201316.3 has no :has()
+     (the proxy rewrites the other two selectors for those devices, this
+     one needs no rewrite at all). */
   [data-phase] [class$="_root"]:has(> [aria-haspopup="menu"]) > [role="menu"],
-  [data-phase] [class$="_card"]:has(> [class$="_search"]) {
+  [data-phase] [class$="_card"]:has(> [class$="_search"]),
+  [data-phase] [data-trigger-menu] {
     position: fixed !important;
     left: 12px !important;
     right: 12px !important;
@@ -1924,7 +1956,7 @@ var MOBILE_CSS = `
 
 `;
 
-// ../packages/dsh-anywhere/client/mobile/locales.ts
+// client/mobile/locales.ts
 var NS = "mobileNav";
 var zh = {
   "open": "\u6253\u5F00\u76EE\u5F55",
@@ -1941,7 +1973,7 @@ var en = {
   "files": "Files"
 };
 
-// ../packages/dsh-anywhere/client/mobile/layout-mode.mjs
+// client/mobile/layout-mode.mjs
 function resolveLayout({ urlValue, stored, narrowMatch }) {
   const url = String(urlValue ?? "").trim();
   if (url === "desktop") return "desktop";
@@ -1965,7 +1997,7 @@ function persistLayoutFromUrl(urlValue) {
   }
 }
 
-// ../packages/dsh-anywhere/client/mobile/mobile-apply.tsx
+// client/mobile/mobile-apply.tsx
 function mobileApply(ctx) {
   const urlValue = new URL(window.location.href).searchParams.get("dsh-layout") ?? "";
   const narrowMQ = window.matchMedia("(max-width: 1023px)");
@@ -2218,7 +2250,7 @@ function mobileApply(ctx) {
   }, MobileDrawerFooter));
 }
 
-// ../packages/dsh-anywhere/client/anywhere-locales.js
+// client/anywhere-locales.js
 var NS2 = "anywhere";
 var zh2 = {
   "section": "\u624B\u673A\u8BBF\u95EE",
@@ -2429,7 +2461,7 @@ var en2 = {
   "feedback": "\u{1F64F} Questions? Open an issue on GitHub"
 };
 
-// ../packages/dsh-anywhere/client/index.jsx
+// client/index.jsx
 var name = "dsh-anywhere";
 var inject = ["slots", "connection", "layout", "locale", "sessionLogDownload"];
 function fmt(t, key, vars) {
