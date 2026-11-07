@@ -170,6 +170,60 @@ plugins:
 
 ---
 
+## 🖥️ 顺带把 ZCode 桌面端也搬到手机上（v1.0.12 起）
+
+ZCode 桌面端自带一个「手机远程控制」网页（官方源 `https://zcode.z.ai/remote/v4`）。
+DSH iOS App 本身就是一个 WKWebView 壳，**不用改一行 App 代码就能打开它**——但直接开官方地址有三个硬伤：
+
+| 硬伤 | 表现 | 本插件的解法 |
+|---|---|---|
+| ES2023 语法 | 入口包直接调 `toSorted` / `Object.groupBy`，Safari **16.4 才有** → iOS 16.3 解析即抛错，卡在启动壳 | 代理层注入全量 ES2023 垫片（`toSorted`/`toReversed`/`toSpliced`/`with`/`groupBy`/`fromAsync`/`withResolvers`/`URL.canParse`/`requestIdleCallback`/`CompressionStream`…） |
+| 语法级降级 | `static {}` 类静态块、`(?<=…)` 后行断言，16.3 在**词法分析期**就崩，运行时 polyfill 救不回 | 与 DSH 页面同一套改写层（见上文第 4 节），服务端把语法换成等价写法 |
+| 强缓存锁死 | 改写后的 JS 被标 `immutable` 缓存一年，命中时**连请求都不发**，服务端怎么改都到不了手机 | 资源 URL 版本化（`?v=`）+ 文档 `no-store` + 资源 `no-cache`/ETag |
+
+### 怎么开
+
+1. **电脑端**（ZCode 桌面端保持官方原版，不要改它）：
+
+   ```bash
+   # Windows（PowerShell，永久）
+   setx ZCODE_WEB_REMOTE_CONTROL_URL "http://<你的电脑IP>:3090/remote/v4"
+   # macOS / Linux
+   export ZCODE_WEB_REMOTE_CONTROL_URL="http://<你的电脑IP>:3090/remote/v4"
+   ```
+
+   设完**必须重启 ZCode 桌面端**才生效。
+
+2. **插件侧**起一个只服务 ZCode 的独立实例（`allowedPaths` 作用域闸，不会把 DSH 页面暴露出去），
+   端口随意，示例用 3090。具体启动脚本随 `zcode-rc-gateway` 一起分发（含 `runner.mjs` /
+   `mobilefix.js` / `diag.html` 与一键安装脚本）。
+
+3. **手机端**在 DSH iOS App 的「服务列表」里加一条：
+
+   ```
+   http://<你的电脑IP>:3090/rc
+   ```
+
+   或直接在 App 里点内置的「ZCode 远程（局域网）」预设，把 IP 改成你的。
+
+### 三条必须提前知道的限制
+
+1. **第一次必须在桌面端点一次「生成远程二维码」，手机扫一次**。
+   `sid` 可以长期复用，但 `mid` 是每次二维码里的一次性邀请，中继只认它；不扫码直接开会连不上。
+   这是 ZCode 官方的限制，不是网关的毛病。
+2. **`/rc` 是唯一长期入口**。官方那条 `/remote/v4?sid=…` 一旦被手机缓存过坏文档，
+   命中时不会发请求，服务端修不到它；`/rc` 每次用毫秒戳拼一个从未缓存过的地址破局。
+   老地址在缓存自然失效后也会自动 302 到 `/rc`（网关 v23 自愈）。
+3. **只在可信内网用**。这套网关零鉴权，同一 WiFi 谁都能开；`last-pair.json` 里有会话号与配对信息，
+   **不要外传、不要做公网端口映射**。要外网就用 Tailscale 这类点对点组网，别把端口暴露到公网。
+
+### 兼容下限
+
+真机验过 **iOS 16.3 及以上**（16.3 / 16.6 两台实测通过）。
+iOS 16.0–16.2、iOS 15 理论上被同一套垫片覆盖，但没有真机验证，不打包票。
+
+---
+
 ## ⚙️ 配置文件说明（`~/.dsh/dsh-anywhere/settings.json`）
 
 插件首次运行会自动生成纯净的通用配置，不包含任何个人敏感链接：
@@ -186,6 +240,65 @@ plugins:
 ---
 
 ## 🗒 更新日志
+
+### v1.0.21
+
+* **ZCode 手机远程页进 README 正式章节**：把 v1.0.12~v1.0.20 摸出来的整套东西写成可照做的文档
+  （环境变量怎么设、`/rc` 为什么是唯一入口、必须扫码一次、只在可信内网用、兼容下限 iOS 16.3）。
+* **`ZCODE_RC_ASSET_VER` 机制固化**：凡是改动 JS/HTML 改写逻辑必须 +1（版本写进资源 URL，
+  老缓存自然失效）。这是「服务端修好、手机还是白屏」这个死结的唯一可靠解法，已写进代码注释。
+
+### v1.0.20
+
+* **粘贴桥正则转义修复**：桥脚本内 `.replace(/\+/g,'-')` 在模板字符串里少一层转义，
+  浏览器侧实得 `/+/g` → 解析期 `SyntaxError: Nothing to repeat` → 整段 `<script>` 不执行、
+  桥按钮根本不出现。已修正转义并加回归单测。
+
+### v1.0.19
+
+* **OAuth 撤口修正**：`webRemoteCallbackUrl` 真身在 `${n}/web-remote/callback` 构造器
+  （v1.0.18 误判 `${n}/remote/v4` 撤错口）。本条连 `cn/share/callback` 同族一并撤销
+  （同族同罪，都会撞 OAuth 白名单 exact-match），`remoteUrl` / WS 模板改写保留。
+* 粘贴桥跳转目标改为 `/web-remote/callback?code&state`（官方只认该路径为 OAuth 回调）。
+
+### v1.0.18
+
+* **OAuth 回调改写撤销 + 回调粘贴桥**：真机实锤 z.ai OAuth 白名单 exact-match 硬拒网关
+  `redirect_uri`（`Redirect URI not registered for this client`），改写路线判死。
+  `redirect_uri` 回归官方注册值，登录后 z.ai 302 回官方源；页面注入「登录回调」粘贴桥，
+  剥 `code`/`state` 重定向回本源 `/remote/v4` 交原生 `handleCallback` 闭环。
+
+### v1.0.17
+
+* **OAuth CSRF 根治**：`webRemoteCallbackUrl` 真身为 `${n}/remote/v4`（n=官方源），
+  补齐带前缀模板改写（全 bundle 仅 1 处，裸 `ROUTE_PATH` 常量不误伤）；
+  `/zcode-rc-api` 上游 `Origin`/`Referer` 改写为官方源（ESA 边缘源校验同款防线）。
+
+### v1.0.16
+
+* **OAuth 回跳闭环**：`webRemoteCallbackUrl` / `remoteUrl` 改写到请求 Host 源 +
+  `/web-remote/callback` 回调挂载；修 `/zcode-rc-api/api/*` 上游映射缺失
+  （`firstPath` 误用 `u.pathname` 致 token 交换必 404）。
+
+### v1.0.15
+
+* **字符串形态 lookbehind 运行时垫片**：16.3 真机信标定位到的盲区 ——
+  `new RegExp("(?<=…)")` 是**运行期**编译，语法改写层看不到它，必须运行时兜。
+
+### v1.0.14
+
+* **`allowedPaths` 作用域闸**：支持独立端口实例（3090 专口专用），
+  同一个代理内核可以只服务 ZCode，不把 DSH web 暴露出去。
+
+### v1.0.13
+
+* **中继 WS 隧道**：页面 WS 走自身 origin 再中继，根治 ESA 边缘 `Origin` 校验 403。
+
+### v1.0.12
+
+* **ZCode 手机远程控制页反代**：`/remote/*` 页面与资产整树镜像、`/zcode-rc-api/*` API 镜像、
+  WS 中继；注入 ES2023 垫片 + `crypto.subtle` 纯 JS 实现，根治 iOS 16.3 白屏；
+  兼容 http 源上的配对 proof（`crypto.subtle` 在非安全上下文不存在）。
 
 ### v1.0.11
 
